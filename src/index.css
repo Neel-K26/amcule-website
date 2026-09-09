@@ -1,0 +1,202 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------- */
+/* Design tokens — locked palette                                          */
+/* ---------------------------------------------------------------------- */
+@theme {
+  --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  /* Headings / body text */
+  --color-slag-900: #111111;
+  --color-slag-700: #3d3d3d;
+
+  /* Primary background (cream) + borders/cards, on the ice-* names so
+     existing bg-ice-50 / border-ice-100 usage across components picks
+     up the new values automatically. */
+  --color-ice-50: #f3f1e8;
+  --color-ice-100: #d8d6cb;
+
+  /* Signature lichen green — deepened for a large-field brand colour.
+     500 is the dominant page canvas; 400 is a brighter pop for small
+     accents on dark cards; 600 is darker, for text-as-accent on cream/white. */
+  --color-lichen-500: #b8d900;
+  --color-lichen-400: #c9e620;
+  --color-lichen-600: #8fa900;
+
+  /* Secondary/muted text, borders, dividers */
+  --color-stone-500: #6f716a;
+  --color-stone-700: #55564f;
+
+  /* Dark UI — the deliberate object colour for feature cards, the hero
+     dashboard, and the footer. Not a background theme. */
+  --color-charcoal-900: #30322c;
+  --color-charcoal-800: #3b3d35;
+
+  --shadow-card: 0 1px 2px 0 rgb(17 17 17 / 0.04), 0 8px 24px -12px rgb(17 17 17 / 0.1);
+  --shadow-card-lg: 0 2px 4px 0 rgb(17 17 17 / 0.04), 0 16px 40px -16px rgb(17 17 17 / 0.14);
+  --shadow-block: 0 20px 50px -16px rgb(0 0 0 / 0.45);
+  --shadow-lichen-soft: 0 8px 20px -6px rgb(184 217 0 / 0.5);
+
+  --animate-marquee: marquee 32s linear infinite;
+  --animate-pulse-glow: pulse-glow 2.4s ease-in-out infinite;
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Base                                                                    */
+/* ---------------------------------------------------------------------- */
+@layer base {
+  * {
+    @apply border-ice-100;
+  }
+
+  html {
+    scroll-behavior: auto;
+    background: var(--color-ice-50);
+  }
+
+  body {
+    @apply font-body text-slag-700 antialiased;
+    background: var(--color-ice-50);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display font-bold tracking-tight text-slag-900;
+  }
+
+  ::selection {
+    background: var(--color-lichen-500);
+    color: var(--color-slag-900);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-lichen-600);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Grain overlay — barely-perceptible fractal-noise, page-wide             */
+/* ---------------------------------------------------------------------- */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.015;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------------------------------------------------------------------- */
+/* Card system — light surfaces, soft shadows, thin borders                */
+/* (kept the "wet-surface" name so components didn't need renaming)        */
+/* ---------------------------------------------------------------------- */
+@layer components {
+  /* White card — the default surface, used on both green fields and
+     cream/ice panels: white fill (a deliberate lift above the cream page
+     background), soft shadow, minimal border. */
+  .wet-surface {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid rgb(17 17 17 / 0.06);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-card);
+  }
+
+  /* Dark UI object — feature cards, the hero dashboard, focal cards.
+     Used deliberately as an anchor against green or cream fields. */
+  .wet-surface.is-dark {
+    background: var(--color-charcoal-900);
+    border-color: rgb(255 255 255 / 0.08);
+    box-shadow: var(--shadow-block);
+    color: #ffffff;
+  }
+
+  .wet-glow {
+    box-shadow: var(--shadow-lichen-soft);
+  }
+
+  .wet-glow-lg {
+    box-shadow: var(--shadow-lichen-soft), var(--shadow-card-lg);
+  }
+
+  .text-glow {
+    /* accent colour only — no glow */
+  }
+
+  /* Topographic contour-line texture — the recurring brand motif. Applied
+     as a corner-anchored background at very low opacity so it reads as
+     texture, never competes with content. */
+  .texture-topo {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640' viewBox='0 0 640 640'%3E%3Cg fill='none' stroke='%23111111' stroke-width='1.1'%3E%3Ccircle cx='620' cy='20' r='60'/%3E%3Ccircle cx='620' cy='20' r='110'/%3E%3Ccircle cx='620' cy='20' r='160'/%3E%3Ccircle cx='620' cy='20' r='210'/%3E%3Ccircle cx='620' cy='20' r='260'/%3E%3Ccircle cx='620' cy='20' r='310'/%3E%3Ccircle cx='620' cy='20' r='360'/%3E%3Ccircle cx='620' cy='20' r='410'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: top right;
+    background-size: 640px 640px;
+  }
+
+  .texture-topo.is-on-dark {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640' viewBox='0 0 640 640'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1.1'%3E%3Ccircle cx='620' cy='20' r='60'/%3E%3Ccircle cx='620' cy='20' r='110'/%3E%3Ccircle cx='620' cy='20' r='160'/%3E%3Ccircle cx='620' cy='20' r='210'/%3E%3Ccircle cx='620' cy='20' r='260'/%3E%3Ccircle cx='620' cy='20' r='310'/%3E%3Ccircle cx='620' cy='20' r='360'/%3E%3Ccircle cx='620' cy='20' r='410'/%3E%3C/g%3E%3C/svg%3E");
+  }
+
+  .bg-noise-fine {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Utilities                                                               */
+/* ---------------------------------------------------------------------- */
+@layer utilities {
+  .container-page {
+    @apply mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-16;
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+    * {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
