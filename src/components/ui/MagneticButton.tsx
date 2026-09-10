@@ -40,7 +40,7 @@ export function MagneticButton({ children, variant = 'primary', className = '', 
   const variants = {
     primary: 'bg-lichen-500 text-slag-900 hover:bg-lichen-400',
     dark: 'bg-charcoal-900 text-white hover:bg-charcoal-800',
-    white: 'bg-white text-slag-900 shadow-card hover:bg-ice-50',
+    white: 'bg-stone-200 text-slag-900 shadow-card hover:bg-ice-50',
     ghost: 'border border-slag-900/25 text-slag-900 hover:border-charcoal-900 hover:bg-slag-900/5',
   }
 

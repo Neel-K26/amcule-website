@@ -3,6 +3,11 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { SiteImage } from '../ui/SiteImage'
+import { TopoLines } from '../ui/TopoLines'
+import { StatBadge } from '../ui/StatBadge'
+import { StrataBands } from '../ui/StrataBands'
+import { TechMark } from '../ui/TechMark'
+import { VerticalMarker } from '../ui/VerticalMarker'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -14,9 +19,10 @@ export interface FormationLayer {
   startDepth: number
   endDepth: number
   /**
-   * Share of the pinned descent's scroll/visual space this layer gets.
-   * Deliberately NOT metre-proportional — Heimdal is a 80 m interval in
-   * reality but gets generous scroll room here so the target payoff lands.
+   * Share of the pinned descent's scroll room this layer gets — the pacing
+   * weighting for the three-act structure. Layers 1–3 are the fast descent
+   * (15% each, 45% total). Heimdal is the whole climax: deceleration into
+   * the target, then the payoff (40%). Basement is the quick exit (15%).
    */
   weight: number
   isTarget?: boolean
@@ -31,7 +37,7 @@ export const formationLayers: FormationLayer[] = [
     depthLabel: '0 – 1,850 m',
     startDepth: 0,
     endDepth: 1850,
-    weight: 0.3,
+    weight: 0.15,
     params: [
       { label: 'Overburden gradient', value: '0.218 bar/m' },
       { label: 'Pore pressure', value: '0.0965 bar/m' },
@@ -43,7 +49,7 @@ export const formationLayers: FormationLayer[] = [
     depthLabel: '1,850 – 2,180 m',
     startDepth: 1850,
     endDepth: 2180,
-    weight: 0.2,
+    weight: 0.15,
     params: [
       { label: 'Fracture gradient', value: '0.154 bar/m' },
       { label: 'Mud viscosity', value: '1.85 cp' },
@@ -55,7 +61,7 @@ export const formationLayers: FormationLayer[] = [
     depthLabel: '2,180 – 2,390 m',
     startDepth: 2180,
     endDepth: 2390,
-    weight: 0.2,
+    weight: 0.15,
     params: [
       { label: 'Permeability', value: '85 mD' },
       { label: 'Pore pressure', value: '0.0965 bar/m' },
@@ -67,7 +73,7 @@ export const formationLayers: FormationLayer[] = [
     depthLabel: '2,390 – 2,470 m',
     startDepth: 2390,
     endDepth: 2470,
-    weight: 0.2,
+    weight: 0.4,
     isTarget: true,
     params: [
       { label: 'Target TVD', value: '2,470 m' },
@@ -81,7 +87,7 @@ export const formationLayers: FormationLayer[] = [
     depthLabel: '2,470 m +',
     startDepth: 2470,
     endDepth: 2470,
-    weight: 0.1,
+    weight: 0.15,
     params: [{ label: 'Status', value: 'Below target — TD reached' }],
   },
 ]
@@ -99,6 +105,26 @@ function useBoundaries() {
 
 function clamp01(n: number) {
   return Math.min(1, Math.max(0, n))
+}
+
+/** Heavy deceleration — used so Heimdal's approach visibly slows rather than arriving at a constant rate. */
+function easeOutExpo(t: number) {
+  return t >= 1 ? 1 : 1 - Math.pow(2, -10 * t)
+}
+
+/**
+ * Perturbs the leading number in a formatted value string by ±1%,
+ * preserving its unit suffix and original decimal precision — used to
+ * make the live parameter readout jitter like real telemetry.
+ */
+function jitterValueText(base: string): string {
+  const match = base.match(/-?\d+(\.\d+)?/)
+  if (!match) return base
+  const num = parseFloat(match[0])
+  const decimals = match[1] ? match[1].length - 1 : 0
+  const jittered = num * (1 + (Math.random() - 0.5) * 0.02)
+  const formatted = decimals > 0 ? jittered.toFixed(decimals) : Math.round(jittered).toString()
+  return base.slice(0, match.index) + formatted + base.slice((match.index ?? 0) + match[0].length)
 }
 
 /**
@@ -141,23 +167,35 @@ function usePinnable() {
 }
 
 /**
- * The pinned, scroll-scrubbed wellbore descent. Mounted only on desktop
- * with motion allowed — StaticWellbore covers mobile + reduced-motion.
+ * The pinned, scroll-scrubbed wellbore descent — a three-act structure:
+ * Act 1 (layers 1–3, 45% of scroll) is a fast, steady-rate descent.
+ * Act 2+3 (Heimdal, 40%) decelerates into the target, then pays off —
+ * the bit visually stops at 2,470m, the band blooms, and the readout
+ * snaps in. Act 4 (basement, 15%) is a quick exit.
  *
- * Everything the user sees each frame (bit position, trail length, band
- * dimming, depth readout, the Heimdal payoff reveal) is a pure function of
- * ScrollTrigger's `progress`, written straight to the DOM via refs/quickSetters.
- * No competing sub-timelines — the scrub is the only effect.
+ * Everything scroll-driven is still one progress-driven onUpdate, written
+ * straight to the DOM via refs/quickSetters — no competing scroll-bound
+ * timelines. The idle bit vibration, telemetry jitter, and glow breathing
+ * are deliberately separate, non-scroll-bound loops that run underneath it
+ * so the sequence stays alive even when the user stops scrolling; the
+ * Heimdal payoff's stagger-in is the one intentional one-shot trigger,
+ * fired once when arrival crosses its threshold.
  */
 function PinnedWellbore() {
   const sectionRef = useRef<HTMLDivElement | null>(null)
   const columnRef = useRef<HTMLDivElement | null>(null)
   const bitRef = useRef<HTMLDivElement | null>(null)
+  const bitCoreRef = useRef<HTMLDivElement | null>(null)
   const trailRef = useRef<HTMLDivElement | null>(null)
   const depthRef = useRef<HTMLSpanElement | null>(null)
   const panelRefs = useRef<Array<HTMLDivElement | null>>([])
   const bandRefs = useRef<Array<HTMLDivElement | null>>([])
+  const haloRefs = useRef<Array<HTMLDivElement | null>>([])
   const payoffRef = useRef<HTMLDivElement | null>(null)
+  const approachRef = useRef<HTMLDivElement | null>(null)
+  const warmOverlayRef = useRef<HTMLDivElement | null>(null)
+  const formationOverlayRef = useRef<HTMLDivElement | null>(null)
+  const crosshairRef = useRef<HTMLDivElement | null>(null)
   const heimdalBandRef = useRef<HTMLDivElement | null>(null)
   const boundaries = useBoundaries()
 
@@ -178,34 +216,87 @@ function PinnedWellbore() {
     ro.observe(column)
 
     const activeIndexRef = { current: -1 }
+    const arrivedRef = { current: false }
 
-    function depthAndIndexAt(progress: number) {
+    // Idle bit vibration — reads as an active drill even when scroll is idle.
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let idleTween: gsap.core.Tween | null = null
+    if (bitCoreRef.current && !prefersReducedMotion) {
+      idleTween = gsap.to(bitCoreRef.current, {
+        duration: 0.06,
+        repeat: -1,
+        x: () => gsap.utils.random(-2, 2),
+        y: () => gsap.utils.random(-2, 2),
+        ease: 'none',
+      })
+    }
+
+    // Telemetry jitter — the active layer's parameter values drift ±1%
+    // every 800ms, like real sensor noise rather than static copy.
+    const jitterId = prefersReducedMotion
+      ? null
+      : window.setInterval(() => {
+          const panel = panelRefs.current[activeIndexRef.current]
+          if (!panel) return
+          panel.querySelectorAll<HTMLElement>('[data-base]').forEach((el) => {
+            const base = el.dataset.base
+            if (base) el.textContent = jitterValueText(base)
+          })
+        }, 800)
+
+    function depthAndBitAt(progress: number) {
       for (let i = 0; i < formationLayers.length; i++) {
         const w0 = boundaries[i]
         const w1 = boundaries[i + 1]
         if (progress <= w1 || i === formationLayers.length - 1) {
           const local = w1 === w0 ? 1 : clamp01((progress - w0) / (w1 - w0))
           const layer = formationLayers[i]
+
+          if (i === HEIMDAL_INDEX) {
+            // Act 2 (approach, local 0–0.6): heavy deceleration into the
+            // target. Act 3 (payoff, local 0.6–1): bit holds at 2,470m.
+            const approach = clamp01(local / 0.6)
+            const depth = layer.startDepth + (layer.endDepth - layer.startDepth) * easeOutExpo(approach)
+            const bitLocal = easeOutExpo(approach)
+            const arrivalLocal = clamp01((local - 0.6) / 0.4)
+            return { index: i, local, depth, bitLocal, arrivalLocal }
+          }
+
+          // Acts 1 and 4: steady, linear rate.
           const depth = layer.startDepth + (layer.endDepth - layer.startDepth) * local
-          return { index: i, local, depth }
+          return { index: i, local, depth, bitLocal: local, arrivalLocal: i > HEIMDAL_INDEX ? 1 : 0 }
         }
       }
-      return { index: formationLayers.length - 1, local: 1, depth: formationLayers[formationLayers.length - 1].endDepth }
+      const last = formationLayers[formationLayers.length - 1]
+      return { index: formationLayers.length - 1, local: 1, depth: last.endDepth, bitLocal: 1, arrivalLocal: 1 }
     }
 
     function onUpdate(self: ScrollTrigger) {
       const progress = self.progress
-      const { index, local, depth } = depthAndIndexAt(progress)
+      const { index, local, depth, bitLocal, arrivalLocal } = depthAndBitAt(progress)
 
-      setBitY(progress * trackHeight)
-      setTrailScale(progress)
+      const bitFraction = boundaries[index] + formationLayers[index].weight * bitLocal
+      setBitY(bitFraction * trackHeight)
+      setTrailScale(bitFraction)
 
       if (depthRef.current) depthRef.current.textContent = Math.round(depth).toLocaleString('en-IN')
 
       bandRefs.current.forEach((band, i) => {
         if (!band) return
-        const state = i < index ? 0.18 : i === index ? 1 : 0.14
+        const state = i < index ? 0.55 : i === index ? 0.96 : 0.4
         band.style.opacity = String(state)
+      })
+
+      // Heimdal band bloom — expands outward as arrival progresses.
+      if (heimdalBandRef.current) {
+        const bloom = 1 + arrivalLocal * 0.6
+        heimdalBandRef.current.style.transform = `translateX(-50%) scaleX(${bloom})`
+      }
+
+      haloRefs.current.forEach((halo, i) => {
+        if (!halo) return
+        halo.classList.toggle('opacity-100', i === index)
+        halo.classList.toggle('opacity-0', i !== index)
       })
 
       if (index !== activeIndexRef.current) {
@@ -218,14 +309,66 @@ function PinnedWellbore() {
       }
 
       if (heimdalBandRef.current) {
-        const atHeimdal = index === HEIMDAL_INDEX
-        heimdalBandRef.current.classList.toggle('wet-glow-lg', atHeimdal)
+        heimdalBandRef.current.classList.toggle('wet-glow-lg', index === HEIMDAL_INDEX)
       }
 
-      if (payoffRef.current) {
-        const heimdalOpacity = index === HEIMDAL_INDEX ? clamp01(local * 1.6 - 0.2) : index > HEIMDAL_INDEX ? 1 : 0
-        payoffRef.current.style.opacity = String(heimdalOpacity)
-        payoffRef.current.style.transform = `translateY(${(1 - heimdalOpacity) * 10}px)`
+      // "TARGET APPROACHING" — a brief indicator during the deceleration,
+      // gone by the time the payoff badge takes over.
+      if (approachRef.current) {
+        let approachOpacity = 0
+        if (index === HEIMDAL_INDEX) {
+          approachOpacity = local < 0.55 ? clamp01((local - 0.05) / 0.2) : clamp01(1 - (local - 0.55) / 0.1)
+        }
+        approachRef.current.style.opacity = String(approachOpacity)
+      }
+
+      // Ambient warm shift as the target nears, gone again by basement.
+      if (warmOverlayRef.current) {
+        const warm = index === HEIMDAL_INDEX ? clamp01(local * 2) : index > HEIMDAL_INDEX ? clamp01(1 - local * 3) : 0
+        warmOverlayRef.current.style.opacity = String(warm * 0.16)
+      }
+
+      // The payoff: the formation photo briefly brightens as the drill
+      // reaches the reservoir — the dark overlay eases from 0.85 down to
+      // 0.7 through arrival, then back to 0.85 once past Heimdal.
+      if (formationOverlayRef.current) {
+        const dip = index === HEIMDAL_INDEX ? arrivalLocal * 0.15 : 0
+        formationOverlayRef.current.style.background = `rgba(30,32,28,${(0.85 - dip).toFixed(2)})`
+      }
+
+      // Trail intensifies through the approach.
+      if (trailRef.current) {
+        const intensity = index === HEIMDAL_INDEX ? 0.4 + clamp01(local) * 0.6 : index > HEIMDAL_INDEX ? 1 : 0.4
+        trailRef.current.style.filter = `drop-shadow(0 0 ${intensity * 6}px rgb(196 227 38 / ${intensity * 0.6}))`
+      }
+
+      // The crosshair only resolves once truly arrived.
+      if (crosshairRef.current) {
+        crosshairRef.current.style.opacity = String(arrivalLocal > 0.3 ? 1 : 0)
+      }
+
+      // The payoff readout is a one-shot stagger-in, not a scroll-bound
+      // fade — it snaps when arrival crosses the threshold, and resets
+      // instantly (no animation) if the user scrolls back above it.
+      const arrived = arrivalLocal > 0.12
+      if (arrived && !arrivedRef.current) {
+        arrivedRef.current = true
+        if (payoffRef.current) {
+          gsap.set(payoffRef.current, { opacity: 1, pointerEvents: 'auto' })
+          const stats = payoffRef.current.querySelectorAll('.payoff-stat')
+          if (prefersReducedMotion) {
+            gsap.set(stats, { opacity: 1, y: 0, scale: 1 })
+          } else {
+            gsap.fromTo(
+              stats,
+              { opacity: 0, y: 8, scale: 0.92 },
+              { opacity: 1, y: 0, scale: 1, duration: 0.32, ease: 'back.out(2.2)', stagger: 0.07, overwrite: true },
+            )
+          }
+        }
+      } else if (!arrived && arrivedRef.current) {
+        arrivedRef.current = false
+        if (payoffRef.current) gsap.set(payoffRef.current, { opacity: 0, pointerEvents: 'none' })
       }
     }
 
@@ -255,27 +398,63 @@ function PinnedWellbore() {
       ro.disconnect()
       cancelAnimationFrame(raf)
       window.removeEventListener('load', onLoad)
+      idleTween?.kill()
+      if (jitterId) window.clearInterval(jitterId)
     }
   }, [boundaries])
 
   return (
     <div ref={sectionRef} className="oil-gas-pin relative min-h-screen">
-      <div className="container-page grid h-screen grid-cols-[1fr_auto] items-center gap-16 py-24">
-        {/* Left: depth readout + cross-fading layer panel */}
-        <div className="max-w-lg">
-          <p className="text-xs font-semibold uppercase tracking-widest text-slag-900/70">Live Descent &middot; Well F-15</p>
+      {/* Dark overlay over the formation photo — keeps the diagram legible,
+          eases toward 0.7 at Heimdal so the reveal is the image itself
+          brightening as the drill reaches the reservoir. */}
+      <div ref={formationOverlayRef} aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: 'rgba(30,32,28,0.85)' }} />
+
+      {/* Ambient warm shift as the target nears */}
+      <div
+        ref={warmOverlayRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[#C87A3D] opacity-0"
+      />
+
+      <div className="container-page grid h-screen grid-cols-[1fr_auto] items-center gap-10 py-24">
+        {/* Left: depth readout + cross-fading layer panel, on its own
+            semi-transparent charcoal backing so it reads against the green */}
+        <div className="relative max-w-lg rounded-2xl border border-white/10 bg-charcoal-900/85 p-8 shadow-[var(--shadow-block)] backdrop-blur-sm sm:p-10">
+          <p className="text-xs font-semibold uppercase tracking-widest text-lichen-400">Live Descent &middot; Well F-15</p>
 
           <div className="mt-5 flex items-baseline gap-3">
-            <span ref={depthRef} className="font-display text-6xl font-bold tabular-nums text-slag-900 xl:text-7xl">
+            <span ref={depthRef} className="font-display text-6xl font-bold tabular-nums text-white xl:text-7xl">
               0
             </span>
-            <span className="text-xl font-medium text-slag-700">m TVD</span>
+            <span className="text-xl font-medium text-white/60">m TVD</span>
           </div>
-          <p className="mt-2 text-xs font-medium uppercase tracking-widest text-slag-700">
-            Target 2,470 m TVD
-          </p>
+          <p className="mt-2 text-xs font-medium uppercase tracking-widest text-white/50">Target 2,470 m TVD</p>
 
-          <div className="relative mt-12 h-72">
+          <dl className="mt-6 flex flex-wrap gap-x-6 gap-y-2 border-t border-white/10 pt-4">
+            <div>
+              <dt className="text-[10px] font-medium uppercase tracking-wider text-white/45">WOB</dt>
+              <dd className="font-display text-sm font-bold text-white tabular-nums">18.4 klbf</dd>
+            </div>
+            <div>
+              <dt className="text-[10px] font-medium uppercase tracking-wider text-white/45">RPM</dt>
+              <dd className="font-display text-sm font-bold text-white tabular-nums">118</dd>
+            </div>
+            <div>
+              <dt className="text-[10px] font-medium uppercase tracking-wider text-white/45">ECD</dt>
+              <dd className="font-display text-sm font-bold text-white tabular-nums">1.32 sg</dd>
+            </div>
+          </dl>
+
+          <div
+            ref={approachRef}
+            className="mt-4 inline-flex w-fit items-center gap-2 rounded-full border border-lichen-400/30 bg-lichen-400/10 px-3 py-1 opacity-0"
+          >
+            <span className="h-1.5 w-1.5 animate-pulse-glow rounded-full bg-lichen-400" />
+            <span className="text-[11px] font-bold uppercase tracking-widest text-lichen-400">Target approaching</span>
+          </div>
+
+          <div className="relative mt-8 h-80">
             {formationLayers.map((layer, i) => (
               <div
                 key={layer.id}
@@ -285,16 +464,16 @@ function PinnedWellbore() {
                 className="absolute inset-0 transition-opacity duration-500 ease-out"
                 style={{ opacity: i === 0 ? 1 : 0, pointerEvents: i === 0 ? 'auto' : 'none' }}
               >
-                <h3 className="font-display text-3xl font-bold text-slag-900">
-                  {layer.name}
-                </h3>
-                <p className="mt-1 text-sm font-medium text-slag-700">{layer.depthLabel}</p>
+                <h3 className={`font-display text-3xl font-bold ${layer.isTarget ? 'text-lichen-400' : 'text-white'}`}>{layer.name}</h3>
+                <p className="mt-1 text-sm font-medium text-white/55">{layer.depthLabel}</p>
 
                 <dl className="mt-6 flex flex-wrap gap-x-8 gap-y-4">
                   {layer.params.map((p) => (
                     <div key={p.label}>
-                      <dt className="text-[11px] font-medium uppercase tracking-wider text-slag-700">{p.label}</dt>
-                      <dd className="font-display text-xl font-bold text-slag-900 tabular-nums">{p.value}</dd>
+                      <dt className="text-[11px] font-medium uppercase tracking-wider text-white/45">{p.label}</dt>
+                      <dd className="font-display text-xl font-bold text-white tabular-nums" data-base={p.value}>
+                        {p.value}
+                      </dd>
                     </div>
                   ))}
                 </dl>
@@ -302,15 +481,36 @@ function PinnedWellbore() {
                 {layer.isTarget && (
                   <div
                     ref={payoffRef}
-                    className="mt-8 inline-flex flex-col gap-3 rounded-2xl border border-white/10 bg-charcoal-900 px-5 py-4 shadow-[var(--shadow-block)]"
-                    style={{ opacity: 0 }}
+                    className="relative mt-8 inline-flex flex-col gap-4 rounded-2xl border border-lichen-400/25 bg-lichen-400/10 px-5 py-4"
+                    style={{ opacity: 0, pointerEvents: 'none' }}
                   >
-                    <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-lichen-500 px-2.5 py-1 text-[11px] font-bold tracking-wide text-slag-900">
-                      TARGET RESERVOIR
+                    <TechMark variant="crosshair" dark className="absolute -right-4 -top-4 h-8 w-8" />
+
+                    <ol className="flex flex-col gap-1.5">
+                      {['Risk signal detected', 'Context evaluated', 'Recommended action'].map((step) => (
+                        <li key={step} className="payoff-stat flex items-center gap-2 text-[11px] font-medium text-white/60">
+                          <span className="h-1 w-1 rounded-full bg-lichen-400" aria-hidden="true" />
+                          {step}
+                        </li>
+                      ))}
+                    </ol>
+
+                    <span className="payoff-stat inline-flex w-fit items-center gap-1.5 rounded-full bg-lichen-500 px-2.5 py-1 text-[11px] font-bold tracking-wide text-slag-900">
+                      TARGET RESERVOIR REACHED
                     </span>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-medium text-white/60">TENETDrill &middot; ILM Confidence</span>
-                      <span className="font-display text-lg font-bold text-lichen-400">92%</span>
+                    <div className="grid grid-cols-3 gap-4">
+                      <div className="payoff-stat">
+                        <dt className="text-[10px] font-medium uppercase tracking-wider text-white/50">ILM Confidence</dt>
+                        <dd className="font-display text-lg font-bold text-lichen-400">92%</dd>
+                      </div>
+                      <div className="payoff-stat">
+                        <dt className="text-[10px] font-medium uppercase tracking-wider text-white/50">Permeability</dt>
+                        <dd className="font-display text-lg font-bold text-white">85 mD</dd>
+                      </div>
+                      <div className="payoff-stat">
+                        <dt className="text-[10px] font-medium uppercase tracking-wider text-white/50">Frac. Gradient</dt>
+                        <dd className="font-display text-lg font-bold text-white">0.154</dd>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -319,59 +519,96 @@ function PinnedWellbore() {
           </div>
         </div>
 
-        {/* Right: the wellbore column itself */}
-        <div className="relative h-[68vh] w-28 shrink-0 xl:w-32">
+        {/* Right: the wellbore column — wide charcoal/lichen formation
+            bands over a faint formation-photo backdrop, with a bit/trail
+            rail running down the left gutter. */}
+        <div className="relative h-[60vh] w-full max-w-sm shrink-0 lg:h-[68vh] lg:w-80">
           <div ref={columnRef} className="relative h-full w-full">
-            <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white/50" aria-hidden="true" />
+            {/* clipped visual layer: formation texture + the bands themselves */}
+            <div className="absolute inset-0 overflow-hidden rounded-2xl border border-white/15 bg-charcoal-900/40">
+              <div className="absolute inset-0 opacity-30 grayscale">
+                <SiteImage filename="oilgas-formation.png" alt="" className="h-full w-full rounded-none border-0" />
+              </div>
+              <div className="absolute inset-0 bg-charcoal-900/25" aria-hidden="true" />
 
-            {/* drilled trail — scaleY only, transform-origin top */}
-            <div
-              ref={trailRef}
-              className="absolute left-1/2 top-0 w-[3px] -translate-x-1/2 rounded-full bg-gradient-to-b from-charcoal-900/70 to-lichen-400 will-change-transform"
-              style={{ height: '100%', transformOrigin: 'top', transform: 'scaleY(0)' }}
-              aria-hidden="true"
-            />
+              <div className="absolute inset-y-0 left-10 right-2">
+                {formationLayers.map((layer, i) => (
+                  <div
+                    key={layer.id}
+                    className="absolute left-0 right-0 overflow-hidden rounded-md"
+                    style={{ top: `${boundaries[i] * 100}%`, height: `${layer.weight * 100}%`, padding: '2px 0' }}
+                  >
+                    <div
+                      ref={(el) => {
+                        haloRefs.current[i] = el
+                      }}
+                      aria-hidden="true"
+                      className="animate-pulse-glow absolute inset-0 opacity-0 blur-md transition-opacity duration-500"
+                      style={{ background: layer.isTarget ? '#C4E326' : '#B8D900' }}
+                    />
+                    <div
+                      ref={(el) => {
+                        bandRefs.current[i] = el
+                        if (layer.isTarget) heimdalBandRef.current = el
+                      }}
+                      className="relative flex h-full items-center rounded-md px-4 transition-shadow duration-300"
+                      style={{
+                        background: layer.isTarget ? '#C4E326' : '#30322C',
+                        opacity: 0.92,
+                      }}
+                    >
+                      <span
+                        className="truncate font-display text-sm font-bold tracking-wide sm:text-base"
+                        style={{ color: layer.isTarget ? '#111111' : '#F3F1E8' }}
+                      >
+                        {layer.name}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-            {/* formation bands */}
-            {formationLayers.map((layer, i) => (
+            {/* rail: central line, drilled trail, drill bit — left gutter */}
+            <div className="absolute inset-y-0 left-0 w-10">
+              <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-white/40" aria-hidden="true" />
               <div
-                key={layer.id}
-                ref={(el) => {
-                  bandRefs.current[i] = el
-                  if (layer.isTarget) heimdalBandRef.current = el
-                }}
-                className="absolute left-1/2 w-3 -translate-x-1/2 rounded-full transition-shadow duration-300"
-                style={{
-                  top: `${boundaries[i] * 100}%`,
-                  height: `${layer.weight * 100}%`,
-                  background: layer.isTarget ? '#C9E620' : '#6F716A',
-                  opacity: 0.14,
-                }}
+                ref={trailRef}
+                className="absolute left-1/2 top-0 w-[3px] -translate-x-1/2 rounded-full bg-gradient-to-b from-charcoal-900/70 to-lichen-400 will-change-transform"
+                style={{ height: '100%', transformOrigin: 'top', transform: 'scaleY(0)' }}
                 aria-hidden="true"
               />
-            ))}
+              <div ref={bitRef} className="absolute left-1/2 top-0 -translate-x-1/2 will-change-transform">
+                <div ref={bitCoreRef} className="h-5 w-5 rounded-full border-2 border-white bg-charcoal-900 shadow-[var(--shadow-block)]" />
+              </div>
+            </div>
 
-            {/* depth scale ticks */}
+            {/* target crosshair, over the Heimdal band */}
+            <div
+              ref={crosshairRef}
+              className="absolute right-4 w-10 opacity-0 transition-opacity duration-300"
+              style={{ top: `${(boundaries[HEIMDAL_INDEX] + formationLayers[HEIMDAL_INDEX].weight * 0.8) * 100}%` }}
+              aria-hidden="true"
+            >
+              <TechMark variant="crosshair" dark className="h-10 w-10" />
+            </div>
+
+            {/* depth scale ticks, outside the column to the left */}
             {boundaries.slice(0, -1).map((b, i) => (
               <span
                 key={formationLayers[i].id}
-                className="absolute right-full mr-3 -translate-y-1/2 whitespace-nowrap text-[11px] font-medium text-slag-700"
+                className="absolute right-full mr-3 -translate-y-1/2 whitespace-nowrap text-[11px] font-medium text-white/60"
                 style={{ top: `${b * 100}%` }}
               >
                 {formationLayers[i].startDepth.toLocaleString('en-IN')} m
               </span>
             ))}
             <span
-              className="absolute right-full mr-3 -translate-y-1/2 whitespace-nowrap text-[11px] font-medium text-slag-900"
+              className="absolute right-full mr-3 -translate-y-1/2 whitespace-nowrap text-[11px] font-bold text-white"
               style={{ top: '100%' }}
             >
               2,470 m
             </span>
-
-            {/* drill bit */}
-            <div ref={bitRef} className="absolute left-1/2 top-0 -translate-x-1/2 will-change-transform">
-              <div className="h-5 w-5 rounded-full border-2 border-white bg-charcoal-900 shadow-[var(--shadow-block)]" />
-            </div>
           </div>
         </div>
       </div>
@@ -381,30 +618,30 @@ function PinnedWellbore() {
 
 /**
  * Static fallback for mobile and prefers-reduced-motion: every layer
- * stacked and fully visible, Heimdal already highlighted, no pin/scrub.
+ * stacked and fully visible. No motion is doing the work of marking
+ * Heimdal here, so it gets extra visual weight — the lichen block shadow,
+ * a crosshair, and both badges.
  */
 function StaticWellbore() {
   const ref = useScrollReveal<HTMLDivElement>()
 
   return (
     <div ref={ref} className="relative mt-16">
-      <div
-        aria-hidden="true"
-        className="absolute left-6 top-0 bottom-0 w-px bg-slag-900/15 sm:left-10"
-      />
+      <div aria-hidden="true" className="absolute left-6 top-0 bottom-0 w-px bg-white/20 sm:left-10" />
 
       <ol className="space-y-6">
         {formationLayers.map((layer) => (
           <li
             key={layer.id}
             className={`formation-layer layer-${layer.id} reveal relative flex flex-col gap-4 rounded-2xl border py-6 pl-16 pr-6 sm:pl-24 ${
-              layer.isTarget ? 'border-transparent bg-charcoal-900 shadow-[var(--shadow-block)]' : 'border-ice-100 bg-white'
+              layer.isTarget ? 'wet-glow-lg border-transparent bg-charcoal-900 shadow-[var(--shadow-block)]' : 'border-ice-100 bg-stone-200'
             }`}
           >
+            {layer.isTarget && <TechMark variant="crosshair" dark className="absolute right-5 top-5 h-8 w-8" />}
             <span
               aria-hidden="true"
               className={`absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 sm:left-7 ${
-                layer.isTarget ? 'border-lichen-400 bg-lichen-400' : 'border-stone-500 bg-white'
+                layer.isTarget ? 'border-lichen-400 bg-lichen-400' : 'border-stone-500 bg-stone-200'
               }`}
             />
 
@@ -432,7 +669,7 @@ function StaticWellbore() {
             {layer.isTarget && (
               <div className="mt-2 inline-flex w-fit flex-col gap-3 rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
                 <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-lichen-500 px-2.5 py-1 text-[11px] font-bold tracking-wide text-slag-900">
-                  TARGET RESERVOIR
+                  TARGET RESERVOIR REACHED
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-medium text-white/60">TENETDrill &middot; ILM Confidence</span>
@@ -453,30 +690,44 @@ export function OilGas() {
   const pinnable = usePinnable()
 
   return (
-    <section id="oil-gas" className="relative overflow-hidden bg-lichen-500">
-      <div aria-hidden="true" className="texture-topo pointer-events-none absolute inset-0 z-0 opacity-[0.06]" />
+    <section id="oil-gas" className="relative overflow-hidden bg-charcoal-900">
+      {/* Full-bleed formation photo — geological texture and depth instead
+          of a flat colour field. A dark overlay keeps everything on top
+          of it legible; PinnedWellbore dials the overlay back at Heimdal
+          so the reveal is the photo itself brightening. */}
+      <div aria-hidden="true" className="absolute inset-0 -z-20">
+        <SiteImage filename="oilgas-formation.png" alt="" className="h-full w-full rounded-none border-0" />
+      </div>
+      {!pinnable && <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'rgba(30,32,28,0.85)' }} />}
+
+      <TopoLines corner="top-right" dark className="z-0 opacity-[0.08]" />
+      <VerticalMarker className="inset-y-24 right-6" dark />
 
       <div className="container-page relative py-28 sm:py-36">
         <div className="reveal max-w-2xl" ref={introRef}>
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-slag-900/70">Oil &amp; Gas</p>
-          <h2 className="text-4xl sm:text-5xl">
-            2,470 metres <span className="text-slag-900/50">to the truth.</span>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-400">Oil &amp; Gas</p>
+          <h2 className="text-4xl text-white sm:text-5xl">
+            2,470 metres <span className="text-white/50">to the truth.</span>
           </h2>
-          <p className="mt-6 text-lg leading-relaxed text-slag-700">
+          <p className="mt-6 text-lg leading-relaxed text-white/70">
             Descend the Volve F-15 wellbore, layer by layer, with live formation
             parameters at every depth &mdash; the same data TENETDrill reasons over.
           </p>
+          <div className="mt-6 flex flex-wrap gap-2">
+            <StatBadge dark>Volve F-15 &middot; Calibrated</StatBadge>
+            <StatBadge dark>Real-world data</StatBadge>
+          </div>
         </div>
 
         <div className="reveal mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
           <SiteImage
-            filename="oilgas-formation.jpg"
+            filename="oilgas-formation.png"
             alt="Subsurface formation / wellsite establishing shot"
             label="Oil &amp; Gas — formation / wellsite"
             className="aspect-[4/3] rounded-2xl"
           />
           <SiteImage
-            filename="oilgas-rig-detail.jpg"
+            filename="oilgas-rig-detail.png"
             alt="Close-up of drilling equipment"
             label="Oil &amp; Gas — rig / BHA detail"
             className="aspect-[4/3] rounded-2xl"
@@ -487,6 +738,8 @@ export function OilGas() {
       </div>
 
       {pinnable && <PinnedWellbore />}
+
+      <StrataBands className="relative z-10 h-6 w-full" />
     </section>
   )
 }

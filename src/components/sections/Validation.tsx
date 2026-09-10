@@ -1,5 +1,7 @@
 import { WetSurface } from '../ui/WetSurface'
 import { SiteImage } from '../ui/SiteImage'
+import { TopoLines } from '../ui/TopoLines'
+import { StatBadge } from '../ui/StatBadge'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { useCountUp } from '../../hooks/useCountUp'
 
@@ -24,24 +26,37 @@ export function Validation() {
   const ref = useScrollReveal<HTMLDivElement>()
 
   return (
-    <section id="validation" className="relative overflow-hidden bg-lichen-500 py-28 sm:py-36">
-      <div aria-hidden="true" className="texture-topo pointer-events-none absolute inset-0 opacity-[0.06]" />
+    <section id="validation" className="bg-dotgrid relative overflow-hidden bg-ice-50 py-28 sm:py-36">
+      <TopoLines corner="top-right" className="opacity-[0.06]" />
+
+      {/* Continues the ops-floor bleed from the bottom of Platform above,
+          fading down into the Warm Stone background. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-40 opacity-25 [mask-image:linear-gradient(to_top,transparent,black_60%)] sm:h-52"
+      >
+        <SiteImage filename="platform-ops-floor.png" alt="" className="h-full w-full rounded-none border-0 grayscale" />
+      </div>
 
       <div className="container-page relative" ref={ref}>
         <div className="reveal grid grid-cols-1 items-end gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="max-w-2xl">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-slag-900/70">Validation &amp; Pilots</p>
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-600">Validation &amp; Pilots</p>
             <h2 className="text-4xl sm:text-5xl">
-              Calibrated on <span className="text-slag-900/50">real field data.</span>
+              Calibrated on <span className="text-stone-500">real field data.</span>
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-slag-700">
               No fake logos, no borrowed case studies. Amcule&rsquo;s models are calibrated
               against the public Volve dataset (Equinor) and validated through an active
               TENETDrill demonstration &mdash; with research and whitepaper work ongoing.
             </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              <StatBadge>Volve F-15 &middot; Calibrated</StatBadge>
+              <StatBadge>Real-world data</StatBadge>
+            </div>
           </div>
           <SiteImage
-            filename="validation-field.jpg"
+            filename="validation-field.png"
             alt="Field site where TENETDrill telemetry is validated"
             label="Validation — field / equipment shot"
             className="aspect-[16/10] rounded-2xl lg:aspect-[4/3]"

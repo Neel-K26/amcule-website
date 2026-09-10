@@ -46,15 +46,12 @@ export function Nav() {
 
   return (
     <header
-      className={clsx(
-        'fixed inset-x-0 top-0 z-50 transition-all duration-300',
-        scrolled ? 'py-3' : 'py-5',
-      )}
+      className={clsx('fixed inset-x-0 top-0 z-50 transition-all duration-300', scrolled ? 'py-3' : 'py-5')}
     >
       <div
         className={clsx(
-          'container-page flex items-center justify-between rounded-2xl px-5 py-3 transition-all duration-300',
-          scrolled && 'wet-surface',
+          'container-page flex items-center justify-between rounded-xl border border-slag-900/10 bg-ice-50/85 px-5 py-2.5 shadow-card backdrop-blur-md transition-all duration-300',
+          scrolled && 'bg-ice-50/95 shadow-card-lg',
         )}
       >
         <a

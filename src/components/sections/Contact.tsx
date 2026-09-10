@@ -3,6 +3,8 @@ import { WetSurface } from '../ui/WetSurface'
 import { MagneticButton } from '../ui/MagneticButton'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { site } from '../../config/site'
+import { TopoLines } from '../ui/TopoLines'
+import { StatBadge } from '../ui/StatBadge'
 
 const interests = [
   'TENETDrill',
@@ -27,14 +29,14 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="relative overflow-hidden bg-lichen-500 py-28 sm:py-36">
-      <div aria-hidden="true" className="texture-topo pointer-events-none absolute inset-0 opacity-[0.06]" />
+    <section id="contact" className="bg-dotgrid relative overflow-hidden bg-ice-50 py-28 sm:py-36">
+      <TopoLines corner="top-right" className="opacity-[0.06]" />
 
       <div className="container-page relative grid grid-cols-1 gap-12 lg:grid-cols-[0.8fr_1.2fr]" ref={ref}>
         <div className="reveal">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-slag-900/70">Contact</p>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-600">Contact</p>
           <h2 className="text-4xl sm:text-5xl">
-            Let&rsquo;s talk <span className="text-slag-900/50">deployment.</span>
+            Let&rsquo;s talk <span className="text-stone-500">deployment.</span>
           </h2>
           <p className="mt-6 max-w-md text-lg leading-relaxed text-slag-700">
             Tell us about your operation and where you&rsquo;d like an on-premise
@@ -45,20 +47,24 @@ export function Contact() {
             <div>
               <dt className="font-semibold text-slag-900">Email</dt>
               <dd>
-                <a href={`mailto:${site.contactEmail}`} className="text-slag-700 hover:text-slag-900">
+                <a href={`mailto:${site.contactEmail}`} className="text-stone-500 hover:text-lichen-600">
                   {site.contactEmail}
                 </a>
               </dd>
             </div>
             <div>
               <dt className="font-semibold text-slag-900">Headquarters</dt>
-              <dd className="text-slag-700">{site.location}</dd>
+              <dd className="text-stone-500">{site.location}</dd>
             </div>
             <div>
               <dt className="font-semibold text-slag-900">Regional presence</dt>
-              <dd className="text-slag-700">{site.gccPresence}</dd>
+              <dd className="text-stone-500">{site.gccPresence}</dd>
             </div>
           </dl>
+
+          <div className="mt-8 flex flex-wrap gap-2">
+            <StatBadge>On-premise</StatBadge>
+          </div>
         </div>
 
         <WetSurface className="reveal p-8 sm:p-10">
@@ -98,7 +104,7 @@ export function Contact() {
                     Select an area
                   </option>
                   {interests.map((i) => (
-                    <option key={i} value={i} className="bg-white text-slag-900">
+                    <option key={i} value={i} className="bg-stone-200 text-slag-900">
                       {i}
                     </option>
                   ))}

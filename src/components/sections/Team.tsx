@@ -1,4 +1,5 @@
 import { WetSurface } from '../ui/WetSurface'
+import { TopoLines } from '../ui/TopoLines'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 
 const team = [
@@ -23,8 +24,8 @@ export function Team() {
   const ref = useScrollReveal<HTMLDivElement>()
 
   return (
-    <section id="team" className="relative overflow-hidden py-28 sm:py-36">
-      <div aria-hidden="true" className="texture-topo pointer-events-none absolute inset-0 opacity-[0.05]" />
+    <section id="team" className="bg-dotgrid relative overflow-hidden bg-ice-50 py-28 sm:py-36">
+      <TopoLines corner="top-right" className="opacity-[0.06]" />
 
       <div className="container-page relative" ref={ref}>
         <div className="reveal max-w-2xl">
