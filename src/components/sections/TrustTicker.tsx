@@ -12,22 +12,24 @@ const metrics = [
  * Auto-scrolling marquee of real, specific metrics — no vague claims.
  * Duplicated once so the CSS marquee keyframe (-50%) loops seamlessly.
  * Pauses via prefers-reduced-motion through the shared global rule.
+ * A full lichen-green band — the strong horizontal accent between Hero
+ * and What We Do that the site otherwise lacks.
  */
 export function TrustTicker() {
   const track = [...metrics, ...metrics]
 
   return (
-    <div className="relative border-y border-ice-100 bg-ice-50 py-5">
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-ice-50 to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-ice-50 to-transparent" />
+    <div className="relative bg-lichen-500 py-5">
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-lichen-500 to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-lichen-500 to-transparent" />
 
       <div className="flex w-max animate-marquee items-center">
         {track.map((metric, i) => (
           <span
             key={`${metric}-${i}`}
-            className="mx-6 flex items-center gap-2 whitespace-nowrap font-body text-sm font-semibold uppercase tracking-wider text-slag-700"
+            className="mx-6 flex items-center gap-2 whitespace-nowrap font-body text-sm font-semibold uppercase tracking-wider text-slag-900"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-lichen-500" aria-hidden="true" />
+            <span className="h-1.5 w-1.5 rounded-full bg-charcoal-900" aria-hidden="true" />
             {metric}
           </span>
         ))}

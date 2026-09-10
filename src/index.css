@@ -163,10 +163,11 @@
   }
 
   /* Engineering graph-paper dot grid — technical texture for every Warm
-     Stone section, so none of them read as a blank page. */
+     Stone section, tinted lichen so even the "blank" sections carry a
+     hint of brand colour instead of reading as bare. */
   .bg-dotgrid {
-    background-image: radial-gradient(circle, rgb(17 17 17 / 0.04) 1px, transparent 1px);
-    background-size: 28px 28px;
+    background-image: radial-gradient(circle, rgb(184 217 0 / 0.06) 1px, transparent 1px);
+    background-size: 24px 24px;
   }
 
   .bg-dotgrid.is-on-dark {

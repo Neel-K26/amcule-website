@@ -332,8 +332,8 @@ function PinnedWellbore() {
       // reaches the reservoir — the dark overlay eases from 0.85 down to
       // 0.7 through arrival, then back to 0.85 once past Heimdal.
       if (formationOverlayRef.current) {
-        const dip = index === HEIMDAL_INDEX ? arrivalLocal * 0.15 : 0
-        formationOverlayRef.current.style.background = `rgba(30,32,28,${(0.85 - dip).toFixed(2)})`
+        const dip = index === HEIMDAL_INDEX ? arrivalLocal * 0.2 : 0
+        formationOverlayRef.current.style.background = `rgba(20,22,18,${(0.6 - dip).toFixed(2)})`
       }
 
       // Trail intensifies through the approach.
@@ -408,7 +408,7 @@ function PinnedWellbore() {
       {/* Dark overlay over the formation photo — keeps the diagram legible,
           eases toward 0.7 at Heimdal so the reveal is the image itself
           brightening as the drill reaches the reservoir. */}
-      <div ref={formationOverlayRef} aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: 'rgba(30,32,28,0.85)' }} />
+      <div ref={formationOverlayRef} aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: 'rgba(20,22,18,0.6)' }} />
 
       {/* Ambient warm shift as the target nears */}
       <div
@@ -698,7 +698,7 @@ export function OilGas() {
       <div aria-hidden="true" className="absolute inset-0 -z-20">
         <SiteImage filename="oilgas-formation.png" alt="" className="h-full w-full rounded-none border-0" />
       </div>
-      {!pinnable && <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'rgba(30,32,28,0.85)' }} />}
+      {!pinnable && <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'rgba(20,22,18,0.6)' }} />}
 
       <TopoLines corner="top-right" dark className="z-0 opacity-[0.08]" />
       <VerticalMarker className="inset-y-24 right-6" dark />

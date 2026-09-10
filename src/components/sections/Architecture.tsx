@@ -1,14 +1,13 @@
-import { WetSurface } from '../ui/WetSurface'
 import { SiteImage } from '../ui/SiteImage'
 import { TopoLines } from '../ui/TopoLines'
-import { ArchitectureDiagram } from './ArchitectureDiagram'
+import { TechMark } from '../ui/TechMark'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 
 /**
- * Architecture — the visual centrepiece of the site: Operational Data →
- * Domain SLM (with its internal layers) → the agentic layer → Operational
- * Decision, rendered as real SVG in ArchitectureDiagram so it assembles
- * itself on scroll rather than shipping as a static image.
+ * Architecture — the visual centrepiece of the site. The photo already
+ * shows the Domain SLM, its internal layers, every specialist agent, the
+ * connection lines, and the operational inputs/outputs — so it IS the
+ * diagram. No coded SVG re-creation on top of it.
  */
 export function Architecture() {
   const ref = useScrollReveal<HTMLDivElement>()
@@ -30,23 +29,25 @@ export function Architecture() {
           </p>
         </div>
 
-        <WetSurface dark className="reveal mt-16 overflow-hidden p-6 sm:p-12">
-          <ArchitectureDiagram />
-        </WetSurface>
-
-        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <SiteImage
-            filename="architecture-slm.png"
-            alt="Visual representation of Amcule's core Small Language Model"
-            label="The SLM core"
-            className="aspect-[16/10] rounded-2xl"
-          />
+        <div className="reveal relative mt-16">
+          <TechMark variant="crosshair" className="absolute -right-3 -top-3 z-10 hidden h-10 w-10 sm:block" />
           <SiteImage
             filename="architecture-agents.png"
-            alt="Visual representation of Amcule's coordinated agent layer"
-            label="The agent layer"
-            className="aspect-[16/10] rounded-2xl"
+            alt="Amcule's Domain SLM architecture: a central model with layered internals — Domain Adaptation, Engineering Reasoning, Knowledge Augmentation, Safety/Validation — surrounded by specialist agents, wired to operational data and an operational decision."
+            label="Architecture — Domain SLM + agents"
+            className="aspect-[16/10] w-full rounded-2xl shadow-[var(--shadow-block)] sm:aspect-[16/9]"
           />
+        </div>
+
+        <div className="reveal mt-10 flex justify-center">
+          <div className="inline-flex flex-col items-center gap-2 rounded-2xl bg-charcoal-900 px-8 py-5 text-center shadow-[var(--shadow-block)]">
+            <span className="rounded-full bg-lichen-500 px-4 py-1.5 text-xs font-bold tracking-wide text-slag-900">
+              Operational Decision
+            </span>
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-white/45">
+              Recommended action, traceable to source
+            </p>
+          </div>
         </div>
       </div>
     </section>

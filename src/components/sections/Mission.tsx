@@ -4,9 +4,9 @@ import { useScrollReveal } from '../../hooks/useScrollReveal'
 
 /**
  * Mission / Vision — one coherent architectural section split roughly
- * 65/35: Mission sits on the dark, physical, rock-grounded side; Vision
- * sits on the clean stone side. A single lichen rule marks the transition
- * between them rather than two separate cards.
+ * 65/35: Mission sits on the lichen-green, grounded, physical side;
+ * Vision sits on the clean stone side. A single lichen rule marks the
+ * transition between them rather than two separate cards.
  */
 export function Mission() {
   const ref = useScrollReveal<HTMLDivElement>()
@@ -14,14 +14,14 @@ export function Mission() {
   return (
     <section id="mission" className="relative">
       <div ref={ref} className="grid grid-cols-1 lg:grid-cols-[65fr_35fr]">
-        {/* Mission — grounded, physical */}
-        <div className="reveal relative overflow-hidden bg-charcoal-900 px-6 py-24 sm:px-10 sm:py-32 lg:px-16">
-          <RockBleed corner="bottom-left" />
-          <TopoLines corner="top-right" dark className="opacity-[0.08]" />
+        {/* Mission — grounded, physical, lichen-green */}
+        <div className="reveal relative overflow-hidden bg-lichen-500 px-6 py-24 sm:px-10 sm:py-32 lg:px-16">
+          <RockBleed corner="bottom-left" filename="oilgas-formation.png" opacity={55} />
+          <TopoLines corner="top-right" className="opacity-[0.09]" />
 
           <div className="relative max-w-xl">
-            <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-lichen-400">Mission</p>
-            <p className="font-display text-3xl font-bold leading-snug text-white sm:text-4xl">
+            <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-slag-900/70">Mission</p>
+            <p className="font-display text-3xl font-bold leading-snug text-slag-900 sm:text-4xl">
               Give every industrial operator a private intelligence trained on their data,
               on their infrastructure &mdash; answerable to no one else.
             </p>

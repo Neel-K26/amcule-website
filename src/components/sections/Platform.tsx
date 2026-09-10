@@ -127,20 +127,20 @@ export function Platform() {
       <RockBleed corner="bottom-left" filename="oilgas-rig-detail.png" opacity={70} />
 
       <div className="container-page relative" ref={ref}>
-        <div className="reveal grid grid-cols-1 items-end gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="max-w-2xl">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-600">Platform</p>
-            <h2 className="text-4xl sm:text-5xl">
-              The enterprise <span className="text-stone-500">intelligence suite.</span>
-            </h2>
-          </div>
-          <SiteImage
-            filename="platform-ops-floor.png"
-            alt="Operations floor monitoring TENETDrill output"
-            label="Platform — control room / ops floor"
-            className="aspect-[16/10] rounded-2xl lg:aspect-[4/3]"
-          />
+        <div className="reveal max-w-2xl">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-600">Platform</p>
+          <h2 className="text-4xl sm:text-5xl">
+            The enterprise <span className="text-stone-500">intelligence suite.</span>
+          </h2>
         </div>
+
+        {/* Commanding banner — a real operations environment, not a thumbnail */}
+        <SiteImage
+          filename="platform-ops-floor.png"
+          alt="Operations floor monitoring TENETDrill output"
+          label="Platform — control room / ops floor"
+          className="reveal mt-12 h-[280px] w-full rounded-2xl shadow-[var(--shadow-block)] sm:h-[400px]"
+        />
 
         <div className="mt-16 grid grid-cols-1 gap-6 lg:grid-cols-3">
           {products.map((p) => (
