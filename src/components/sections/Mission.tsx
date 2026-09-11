@@ -1,44 +1,102 @@
-import { RockBleed } from '../ui/RockBleed'
+import { getImage } from '../../lib/images'
 import { TopoLines } from '../ui/TopoLines'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 
+const operatorIlm = ['Well Data', 'Equipment Logs', 'Sensor Streams', 'Documents & SOPs', 'Historical Operations']
+const domainIntelligence = ['Understand', 'Reason', 'Predict', 'Recommend', 'Act']
+const bottomTrack = ['Data', 'Context', 'Intelligence', 'Decisions', 'Impact']
+
 /**
- * Mission / Vision — one coherent architectural section split roughly
- * 65/35: Mission sits on the lichen-green, grounded, physical side;
- * Vision sits on the clean stone side. A single lichen rule marks the
- * transition between them rather than two separate cards.
+ * A small glassmorphism info card, floating over the Mission photo.
+ */
+function GlassCard({ title, items }: { title: string; items: string[] }) {
+  return (
+    <div className="w-full max-w-[220px] rounded-xl border border-white/20 bg-white/10 p-4 backdrop-blur-md">
+      <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.04em] text-white">{title}</p>
+      <ul className="mt-3 flex flex-col gap-1.5">
+        {items.map((item) => (
+          <li key={item} className="flex items-center gap-2 text-xs text-white/75">
+            <span className="h-1 w-1 rounded-full bg-lichen-400" aria-hidden="true" />
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+/**
+ * Mission / Vision — a two-column, no-gap layout: Mission sits on the
+ * operator-with-laptop photo (charcoal container, background-image
+ * cover); Vision sits on the clean warm-stone side.
  */
 export function Mission() {
   const ref = useScrollReveal<HTMLDivElement>()
+  const missionImg = getImage('mission-new.png')
 
   return (
     <section id="mission" className="relative">
       <div ref={ref} className="grid grid-cols-1 lg:grid-cols-[65fr_35fr]">
-        {/* Mission — grounded, physical, lichen-green */}
-        <div className="reveal relative overflow-hidden bg-lichen-500 px-6 py-24 sm:px-10 sm:py-32 lg:px-16">
-          <RockBleed corner="bottom-left" filename="oilgas-formation.png" opacity={55} />
-          <TopoLines corner="top-right" className="opacity-[0.09]" />
+        {/* Mission — the operator photo as a background-image, charcoal container */}
+        <div
+          className="reveal relative isolate flex min-h-[640px] flex-col justify-between overflow-hidden bg-charcoal-900 px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-20"
+          style={missionImg ? { backgroundImage: `url(${missionImg})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+        >
+          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-charcoal-900/55" />
 
-          <div className="relative max-w-xl">
-            <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-slag-900/70">Mission</p>
-            <p className="font-display text-3xl font-bold leading-snug text-slag-900 sm:text-4xl">
-              Give every industrial operator a private intelligence trained on their data,
-              on their infrastructure &mdash; answerable to no one else.
-            </p>
+          <div className="relative flex flex-1 flex-col justify-between gap-10 lg:flex-row lg:items-start">
+            <div className="max-w-lg">
+              <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-lichen-400">Mission</p>
+              <p className="font-display text-3xl font-bold leading-snug text-ice-50 sm:text-4xl">
+                Give every industrial operator a private intelligence trained on their data, on their
+                infrastructure &mdash;{' '}
+                <span className="italic text-lichen-400">answerable to no one else.</span>
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-start gap-4 lg:mt-2">
+              <GlassCard title="Operator's ILM" items={operatorIlm} />
+              <GlassCard title="Domain Intelligence" items={domainIntelligence} />
+            </div>
+          </div>
+
+          <div className="relative mt-12 flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between">
+            <ul className="flex flex-col gap-1 border-l border-lichen-400/40 pl-3">
+              {bottomTrack.map((word) => (
+                <li key={word} className="font-mono text-[11px] font-medium uppercase tracking-[0.04em] text-white/70">
+                  {word}
+                </li>
+              ))}
+            </ul>
+
+            <div className="flex flex-col gap-1 text-left sm:text-right">
+              <p className="font-mono text-[11px] font-medium uppercase tracking-[0.04em] text-white/70">
+                Built for Real Operators.
+              </p>
+              <p className="font-mono text-[11px] font-medium uppercase tracking-[0.04em] text-white/70">
+                Same Data. Deeper Answers.
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* The transition — a single lichen rule, not two cards */}
-        <div className="relative overflow-hidden bg-dotgrid bg-ice-50 px-6 py-24 sm:px-10 sm:py-32 lg:px-12">
-          <div className="absolute inset-y-0 left-0 hidden w-px bg-lichen-500 lg:block" aria-hidden="true" />
-          <div className="absolute inset-x-0 top-0 h-px w-full bg-lichen-500 lg:hidden" aria-hidden="true" />
+        {/* Vision — clean warm stone */}
+        <div className="relative flex flex-col justify-between overflow-hidden bg-dotgrid bg-ice-50 px-6 py-16 sm:px-10 sm:py-20 lg:px-12 lg:py-20">
+          <TopoLines corner="top-right" className="opacity-[0.09]" />
 
           <div className="relative max-w-sm">
             <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-lichen-dark">Vision</p>
             <p className="font-display text-2xl font-bold leading-snug text-slag-900 sm:text-3xl">
               A future where every critical operation&rsquo;s intelligence layer is{' '}
-              <span className="text-lichen-dark">sovereign</span> &mdash; not rented,
-              not shared, not controlled by a contractor.
+              <span className="font-bold text-lichen-dark">sovereign</span> &mdash; not rented, not
+              shared, not controlled by a contractor.
+            </p>
+          </div>
+
+          <div className="relative mt-12">
+            <div className="mb-3 h-px w-10 bg-slag-900/20" aria-hidden="true" />
+            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.04em] text-stone-500">
+              Same Principles. A Stronger Tomorrow.
             </p>
           </div>
         </div>

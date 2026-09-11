@@ -4,7 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { SiteImage } from '../ui/SiteImage'
 import { TopoLines } from '../ui/TopoLines'
-import { StatBadge } from '../ui/StatBadge'
 import { StrataBands } from '../ui/StrataBands'
 import { TechMark } from '../ui/TechMark'
 import { VerticalMarker } from '../ui/VerticalMarker'
@@ -194,7 +193,6 @@ function PinnedWellbore() {
   const payoffRef = useRef<HTMLDivElement | null>(null)
   const approachRef = useRef<HTMLDivElement | null>(null)
   const warmOverlayRef = useRef<HTMLDivElement | null>(null)
-  const entryRef = useRef<HTMLDivElement | null>(null)
   const formationOverlayRef = useRef<HTMLDivElement | null>(null)
   const crosshairRef = useRef<HTMLDivElement | null>(null)
   const heimdalBandRef = useRef<HTMLDivElement | null>(null)
@@ -276,15 +274,6 @@ function PinnedWellbore() {
       const progress = self.progress
       const { index, local, depth, bitLocal, arrivalLocal } = depthAndBitAt(progress)
 
-      // Entry title card — fully visible at rest, gone within the first
-      // 5% of scroll so the descent takes over almost immediately.
-      const entryFade = clamp01(progress / 0.05)
-      if (entryRef.current) {
-        const entryOpacity = 1 - entryFade
-        entryRef.current.style.opacity = String(entryOpacity)
-        entryRef.current.style.pointerEvents = entryOpacity > 0.05 ? 'auto' : 'none'
-      }
-
       const bitFraction = boundaries[index] + formationLayers[index].weight * bitLocal
       setBitY(bitFraction * trackHeight)
       setTrailScale(bitFraction)
@@ -338,15 +327,12 @@ function PinnedWellbore() {
         warmOverlayRef.current.style.opacity = String(warm * 0.16)
       }
 
-      // The overlay starts at 0.15 during the entry card (so the formation
-      // photo reads behind it), ramps to the normal 0.65 resting level as
-      // the entry fades out over the first 5% of scroll, then dips again
-      // as the payoff: the formation photo briefly brightens as the drill
+      // Dark overlay over the formation photo, dipping briefly as the
+      // payoff hits: the formation photo briefly brightens as the drill
       // reaches the reservoir.
       if (formationOverlayRef.current) {
-        const restingOpacity = 0.15 + entryFade * (0.65 - 0.15)
         const dip = index === HEIMDAL_INDEX ? arrivalLocal * 0.2 : 0
-        formationOverlayRef.current.style.background = `rgba(20,23,18,${clamp01(restingOpacity - dip).toFixed(2)})`
+        formationOverlayRef.current.style.background = `rgba(20,23,18,${clamp01(0.65 - dip).toFixed(2)})`
       }
 
       // Trail intensifies through the approach.
@@ -431,7 +417,7 @@ function PinnedWellbore() {
       {/* Dark overlay over the formation photo — keeps the diagram legible,
           eases toward 0.4 at Heimdal so the reveal is the image itself
           brightening as the drill reaches the reservoir. */}
-      <div ref={formationOverlayRef} aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: 'rgba(20,23,18,0.15)' }} />
+      <div ref={formationOverlayRef} aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: 'rgba(20,23,18,0.65)' }} />
 
       {/* Ambient warm shift as the target nears */}
       <div
@@ -439,66 +425,6 @@ function PinnedWellbore() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[#C4E326] opacity-0"
       />
-
-      {/* Entry state — what's on screen before any scroll happens, so the
-          section is never a blank dark frame. Fades out over the first 5%
-          of scroll once the user starts, handing off to the descent. */}
-      <div
-        ref={entryRef}
-        className="absolute inset-0 z-20 flex items-center justify-center overflow-hidden px-6 py-10 text-left transition-opacity duration-200"
-      >
-        <div className="max-w-2xl">
-          <div className="mb-4 flex items-center gap-3">
-            <span className="h-px w-10 bg-lichen-500" aria-hidden="true" />
-            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.04em] text-lichen-500">
-              Our Objectives &amp; Platform Technology
-            </p>
-          </div>
-
-          <h3 className="font-display text-3xl font-bold leading-tight text-ice-50 sm:text-4xl">Discover Our Objectives.</h3>
-          <p className="mt-3 max-w-xl text-sm leading-relaxed text-stone-500 sm:text-base">
-            Our objective is to build an indigenous Platform Technology Development ecosystem using
-            Institutional Language Models, domain-specific SLMs, and agentic AI infrastructure &mdash;
-            deployed across the following critical domains:
-          </p>
-
-          <SiteImage
-            filename="objectives.png"
-            alt="Amcule's platform technology objectives across critical industrial domains"
-            label="Objectives — platform technology overview"
-            className="mx-auto mt-6 h-48 w-[90%] rounded-2xl border-0 sm:h-64 lg:h-72 xl:h-[420px]"
-          />
-
-          <div className="mt-6 grid grid-cols-2 gap-x-8 gap-y-1.5">
-            {[
-              'Oil & Gas · Energy',
-              'Finance & Banking',
-              'Agriculture',
-              'Industrial Processes',
-              'Manufacturing',
-              'Rare Earth & Mineral',
-              'Semiconductor',
-              'Quantum Computing',
-              'Healthcare',
-              'Defence & Research',
-            ].map((domain) => (
-              <div key={domain} className="flex items-center gap-2 text-xs text-ice-50/75 sm:text-sm">
-                <span className="text-lichen-500" aria-hidden="true">
-                  &rarr;
-                </span>
-                {domain}
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 flex items-center gap-2">
-            <svg className="h-4 w-4 animate-bounce text-lichen-500" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 4v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <span className="text-xs font-medium text-stone-500">Scroll to descend through the wellbore</span>
-          </div>
-        </div>
-      </div>
 
       <div className="container-page grid h-screen grid-cols-[1fr_auto] items-center gap-10 py-24">
         {/* Left: depth readout + cross-fading layer panel, on its own
@@ -791,34 +717,38 @@ export function OilGas() {
       <VerticalMarker className="inset-y-24 right-6" dark />
 
       <div className="container-page relative py-28 sm:py-36">
-        <div className="reveal max-w-2xl" ref={introRef}>
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-400">Oil &amp; Gas</p>
+        <div className="reveal max-w-3xl" ref={introRef}>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-400">Our Objectives &amp; Platform Technology</p>
           <h2 className="text-4xl text-white sm:text-5xl">
-            2,470 metres <span className="text-white/50">to the truth.</span>
+            Discover Our Objectives.
           </h2>
-          <p className="mt-6 text-lg leading-relaxed text-white/70">
-            Descend the Volve F-15 wellbore, layer by layer, with live formation
-            parameters at every depth &mdash; the same data TENETDrill reasons over.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-2">
-            <StatBadge dark>Volve F-15 &middot; Calibrated</StatBadge>
-            <StatBadge dark>Real-world data</StatBadge>
-          </div>
         </div>
 
-        <div className="reveal mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
-          <SiteImage
-            filename="oilgas-formation.png"
-            alt="Subsurface formation / wellsite establishing shot"
-            label="Oil &amp; Gas — formation / wellsite"
-            className="aspect-[4/3] rounded-2xl"
-          />
-          <SiteImage
-            filename="oilgas-rig-detail.png"
-            alt="Close-up of drilling equipment"
-            label="Oil &amp; Gas — rig / BHA detail"
-            className="aspect-[4/3] rounded-2xl"
-          />
+        <SiteImage
+          filename="objectives.png"
+          alt="Amcule's platform technology objectives across critical industrial domains"
+          label="Objectives — platform technology overview"
+          className="reveal mt-10 h-[45vh] w-full rounded-2xl border-0 sm:h-[60vh] lg:h-[80vh]"
+        />
+
+        <div className="reveal mt-10 flex flex-wrap gap-x-3 gap-y-2 text-sm text-white/70 sm:text-base">
+          {[
+            'Oil & Gas · Energy',
+            'Finance & Banking',
+            'Agriculture',
+            'Industrial Processes',
+            'Manufacturing',
+            'Rare Earth & Mineral Extraction',
+            'Semiconductor Industry',
+            'Healthcare',
+            'Defence & Research',
+            'Quantum Computing',
+          ].map((domain, i, arr) => (
+            <span key={domain} className="flex items-center gap-3">
+              {domain}
+              {i < arr.length - 1 && <span className="text-lichen-500">|</span>}
+            </span>
+          ))}
         </div>
 
         {!pinnable && <StaticWellbore />}
