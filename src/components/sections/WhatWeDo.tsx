@@ -35,8 +35,9 @@ export function WhatWeDo() {
   return (
     <section
       id="what-we-do"
-      className="relative overflow-hidden px-6 py-28 sm:px-10 sm:py-36 lg:px-16"
+      className="overflow-hidden px-6 py-28 sm:px-10 sm:py-36 lg:px-16"
       style={{
+        position: 'relative',
         backgroundImage: `url(${whatWeDoBg})`,
         backgroundSize: 'cover',
         backgroundPosition: 'right center',
@@ -45,16 +46,18 @@ export function WhatWeDo() {
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
         style={{
+          position: 'absolute',
+          inset: 0,
           background:
-            'linear-gradient(90deg, rgba(243,241,232,0.95) 0%, rgba(243,241,232,0.85) 40%, rgba(243,241,232,0.2) 70%, transparent 100%)',
+            'linear-gradient(90deg, rgba(243,241,232,0.96) 0%, rgba(243,241,232,0.9) 45%, rgba(243,241,232,0.3) 70%, transparent 100%)',
+          pointerEvents: 'none',
         }}
       />
 
       <TopoLines corner="top-right" className="opacity-[0.07]" />
 
-      <div className="relative" ref={ref} style={{ maxWidth: '580px' }}>
+      <div ref={ref} style={{ position: 'relative', zIndex: 1, maxWidth: '580px' }}>
         <div className="reveal">
           <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-dark">What We Do</p>
           <h2 className="text-4xl sm:text-5xl">
