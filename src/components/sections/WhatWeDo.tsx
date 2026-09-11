@@ -40,7 +40,7 @@ export function WhatWeDo() {
         position: 'relative',
         backgroundImage: `url(${whatWeDoBg})`,
         backgroundSize: 'cover',
-        backgroundPosition: 'right center',
+        backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
       }}
     >
