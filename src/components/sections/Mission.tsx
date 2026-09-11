@@ -1,4 +1,3 @@
-import { getImage } from '../../lib/images'
 import { TopoLines } from '../ui/TopoLines'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 
@@ -32,18 +31,15 @@ function GlassCard({ title, items }: { title: string; items: string[] }) {
  */
 export function Mission() {
   const ref = useScrollReveal<HTMLDivElement>()
-  const missionImg = getImage('mission-new.png')
 
   return (
     <section id="mission" className="relative">
       <div ref={ref} className="grid grid-cols-1 lg:grid-cols-[65fr_35fr]">
-        {/* Mission — the operator photo as a background-image, charcoal container */}
-        <div
-          className="reveal relative isolate flex min-h-[640px] flex-col justify-between overflow-hidden bg-charcoal-900 px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-20"
-          style={missionImg ? { backgroundImage: `url(${missionImg})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
-        >
-          <div aria-hidden="true" className="absolute inset-0 -z-10 bg-charcoal-900/55" />
-
+        {/* Mission — charcoal container (no raw mockup image as background —
+            that file is a full design reference with its own baked-in text,
+            not a plain photo, and using it as a background bled ghost copy
+            through behind the coded overlay). */}
+        <div className="reveal relative isolate flex min-h-[640px] flex-col justify-between overflow-hidden bg-charcoal-900 px-6 py-16 sm:px-10 sm:py-20 lg:px-16 lg:py-20">
           <div className="relative flex flex-1 flex-col justify-between gap-10 lg:flex-row lg:items-start">
             <div className="max-w-lg">
               <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-lichen-400">Mission</p>
