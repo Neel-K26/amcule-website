@@ -50,7 +50,7 @@ export function WhatWeDo() {
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(90deg, rgba(243,241,232,0.96) 0%, rgba(243,241,232,0.9) 45%, rgba(243,241,232,0.3) 70%, transparent 100%)',
+            'linear-gradient(90deg, rgba(243,241,232,0.55) 0%, rgba(243,241,232,0.4) 40%, rgba(243,241,232,0.12) 65%, transparent 100%)',
           pointerEvents: 'none',
         }}
       />
