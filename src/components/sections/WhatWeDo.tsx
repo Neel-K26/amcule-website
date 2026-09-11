@@ -40,7 +40,7 @@ export function WhatWeDo() {
           <TopoLines corner="top-right" className="opacity-[0.07]" />
 
           <div className="reveal relative max-w-2xl">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-600">What We Do</p>
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-dark">What We Do</p>
             <h2 className="text-4xl sm:text-5xl">
               Custom Language Models <span className="text-stone-500">as a Service.</span>
             </h2>
@@ -54,7 +54,7 @@ export function WhatWeDo() {
           <div className="relative mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
             {pillars.map((pillar) => (
               <WetSurface key={pillar.title} className="reveal border-t-[3px] border-t-charcoal-900 p-7">
-                <pillar.icon className="h-7 w-7 text-lichen-600" />
+                <pillar.icon className="h-7 w-7 text-lichen-dark" />
                 <h3 className="mt-4 font-display text-xl font-bold text-charcoal-900">{pillar.title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-stone-500">{pillar.body}</p>
               </WetSurface>

@@ -69,7 +69,10 @@ export function Team() {
 
       <div className="container-page relative" ref={ref}>
         <div className="reveal max-w-2xl">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-600">Team</p>
+          <div className="mb-4 flex items-center gap-3">
+            <span className="h-px w-10 bg-lichen-dark" aria-hidden="true" />
+            <p className="font-mono text-[13px] font-medium uppercase tracking-[0.04em] text-lichen-dark">Team</p>
+          </div>
           <h2 className="text-4xl sm:text-5xl">
             Built by people <span className="text-stone-500">who know the field.</span>
           </h2>
@@ -84,8 +87,8 @@ export function Team() {
               <TeamPhoto photo={member.photo} name={member.name} />
               <div className="flex flex-1 flex-col p-7">
                 <h3 className="font-display text-2xl font-bold text-slag-900">{member.name}</h3>
-                <p className="mt-1 text-sm font-semibold uppercase tracking-wider text-lichen-600">{member.role}</p>
-                <p className="mt-4 text-sm leading-relaxed text-stone-500" dangerouslySetInnerHTML={{ __html: member.body }} />
+                <p className="mt-1 font-mono text-[13px] font-medium text-lichen-dark">{member.role}</p>
+                <p className="mt-4 text-base leading-relaxed text-stone-500" dangerouslySetInnerHTML={{ __html: member.body }} />
               </div>
             </WetSurface>
           ))}

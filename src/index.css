@@ -6,40 +6,40 @@
 @theme {
   --font-display: 'Inter', ui-sans-serif, system-ui, sans-serif;
   --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
 
-  /* Headings / body text */
+  /* Ink — primary text on all light (warm-stone) surfaces. */
   --color-slag-900: #111111;
   --color-slag-700: #444540;
 
-  /* Primary background (Warm Stone) + card fill/borders, on the ice-*
-     names so existing bg-ice-50 / border-ice-100 usage across components
-     picks up the new values automatically. Borders are a translucent
-     black, not a solid warm grey, so they read correctly on green too. */
+  /* Warm Stone (primary canvas) + Card Surface / Card Border, on the
+     existing ice-50 / stone-200 / ice-100 names so current usage picks
+     up the DESIGN.md values automatically without a site-wide rename. */
   --color-ice-50: #f3f1e8;
-  --color-stone-200: #eae8de;
-  --color-ice-100: rgb(17 17 17 / 0.12);
+  --color-stone-200: #e9e7de;
+  --color-ice-100: #d8d6cb;
 
-  /* Signature lichen green. 500 is the bright accent — reserved for the
-     ticker band and small interactive states only now. 900 is the dark,
-     olive/forest "lichen-in-shadow" tone that carries most of the site's
-     green as a background field; dark text sits directly on it. 400/600
-     are small-scale accent variants (bright pops, text-as-accent). */
+  /* Lichen Green — the single accent (CTAs, status dots, key stats, the
+     ticker/Mission-left bands). Lichen Dark is the text-accent variant,
+     readable directly on warm stone. Never lichen as body text or as a
+     large fill outside the ticker and Mission's left panel. */
   --color-lichen-500: #b8d900;
   --color-lichen-400: #c4e326;
   --color-lichen-600: #8fa900;
-  --color-lichen-900: #42500e;
+  --color-lichen-dark: #4a5a10;
 
-  /* Secondary/muted text, borders, dividers */
-  --color-stone-500: #777872;
+  /* Graphite — secondary/muted text, captions, dividers. */
+  --color-stone-500: #6f716a;
   --color-stone-700: #5c5d57;
 
-  /* Body text specifically for the dark-lichen-green sections. */
+  /* Charcoal Light — secondary dark surface / muted text on charcoal. */
   --color-slag-800: #30322c;
 
-  /* Dark UI — the deliberate object colour for feature cards, the hero
-     dashboard, and the footer. Not a background theme. */
-  --color-charcoal-900: #1d201b;
-  --color-charcoal-800: #282c24;
+  /* Charcoal — dark section backgrounds and dark cards (product cards,
+     the architecture diagram, O&G, Contact, Footer). Near-black with a
+     warm green undertone, not a neutral grey-black. */
+  --color-charcoal-900: #20231d;
+  --color-charcoal-800: #30322c;
 
   --shadow-card: 0 1px 2px 0 rgb(17 17 17 / 0.04), 0 8px 24px -12px rgb(17 17 17 / 0.1);
   --shadow-card-lg: 0 2px 4px 0 rgb(17 17 17 / 0.04), 0 16px 40px -16px rgb(17 17 17 / 0.14);

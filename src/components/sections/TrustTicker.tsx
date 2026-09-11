@@ -27,7 +27,7 @@ export function TrustTicker() {
         {track.map((metric, i) => (
           <span
             key={`${metric}-${i}`}
-            className="mx-6 flex items-center gap-2 whitespace-nowrap font-body text-sm font-semibold uppercase tracking-wider text-slag-900"
+            className="mx-6 flex items-center gap-2 whitespace-nowrap font-body text-sm font-semibold uppercase tracking-wider text-charcoal-900"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-charcoal-900" aria-hidden="true" />
             {metric}

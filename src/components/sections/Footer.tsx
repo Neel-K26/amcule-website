@@ -7,15 +7,15 @@ const columns: { title: string; links: string[] }[] = [
   { title: 'Research', links: ['Validation & Pilots', 'Volve Calibration', 'Whitepapers'] },
 ]
 
-/** Footer — the page's closing lichen-green band. Strong, branded close. */
+/** Footer — the page's closing charcoal band. Strong, branded close. */
 export function Footer() {
   return (
-    <footer className="relative bg-lichen-900 pt-16 pb-8">
+    <footer className="relative bg-charcoal-900 pt-16 pb-8">
       <div className="container-page">
         <div className="grid grid-cols-1 gap-12 pb-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
-            <Logo />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-slag-900/70">
+            <Logo light />
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-stone-500">
               {site.tagline} Custom Language Models as a Service for heavy industry &mdash;
               on-premise, zero data egress.
             </p>
@@ -23,13 +23,13 @@ export function Footer() {
 
           {columns.map((col) => (
             <div key={col.title}>
-              <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-charcoal-900">
+              <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-400">
                 {col.title}
               </p>
               <ul className="space-y-3">
                 {col.links.map((link) => (
                   <li key={link}>
-                    <a href="#" className="text-sm text-slag-900/70 transition-colors hover:text-slag-900">
+                    <a href="#" className="text-sm text-stone-500 transition-colors hover:text-white">
                       {link}
                     </a>
                   </li>
@@ -39,13 +39,13 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="flex flex-col gap-4 border-t border-slag-900/15 pt-8 text-xs text-slag-900/60 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-4 border-t border-white/10 pt-8 text-xs text-stone-500 sm:flex-row sm:items-center sm:justify-between">
           <p>
             &copy; {site.year} {site.legalName}. All rights reserved.
           </p>
           <p>
             {site.location} &middot; {site.gccPresence} &middot;{' '}
-            <a href={`mailto:${site.contactEmail}`} className="hover:text-slag-900">
+            <a href={`mailto:${site.contactEmail}`} className="hover:text-white">
               {site.contactEmail}
             </a>
           </p>

@@ -15,7 +15,7 @@ export function Mission() {
     <section id="mission" className="relative">
       <div ref={ref} className="grid grid-cols-1 lg:grid-cols-[65fr_35fr]">
         {/* Mission — grounded, physical, lichen-green */}
-        <div className="reveal relative overflow-hidden bg-lichen-900 px-6 py-24 sm:px-10 sm:py-32 lg:px-16">
+        <div className="reveal relative overflow-hidden bg-lichen-500 px-6 py-24 sm:px-10 sm:py-32 lg:px-16">
           <RockBleed corner="bottom-left" filename="oilgas-formation.png" opacity={55} />
           <TopoLines corner="top-right" className="opacity-[0.09]" />
 
@@ -34,10 +34,10 @@ export function Mission() {
           <div className="absolute inset-x-0 top-0 h-px w-full bg-lichen-500 lg:hidden" aria-hidden="true" />
 
           <div className="relative max-w-sm">
-            <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-lichen-600">Vision</p>
+            <p className="mb-6 text-xs font-semibold uppercase tracking-widest text-lichen-dark">Vision</p>
             <p className="font-display text-2xl font-bold leading-snug text-slag-900 sm:text-3xl">
               A future where every critical operation&rsquo;s intelligence layer is{' '}
-              <span className="text-lichen-600">sovereign</span> &mdash; not rented,
+              <span className="text-lichen-dark">sovereign</span> &mdash; not rented,
               not shared, not controlled by a contractor.
             </p>
           </div>

@@ -29,46 +29,46 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="relative overflow-hidden bg-lichen-900 py-28 sm:py-36">
-      <TopoLines corner="top-right" className="opacity-[0.09]" />
+    <section id="contact" className="relative overflow-hidden bg-charcoal-900 py-28 sm:py-36">
+      <TopoLines corner="top-right" dark className="opacity-[0.09]" />
 
       <div className="container-page relative grid grid-cols-1 gap-12 lg:grid-cols-[0.8fr_1.2fr]" ref={ref}>
         <div className="reveal">
           <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-500">Contact</p>
-          <h2 className="text-4xl sm:text-5xl">
+          <h2 className="text-4xl text-white sm:text-5xl">
             Let&rsquo;s talk <span className="text-stone-500">deployment.</span>
           </h2>
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-slag-800">
+          <p className="mt-6 max-w-md text-lg leading-relaxed text-white/70">
             Tell us about your operation and where you&rsquo;d like an on-premise
             intelligence layer. We&rsquo;ll respond within one business day.
           </p>
 
           <dl className="mt-10 space-y-4 text-sm">
             <div>
-              <dt className="font-semibold text-slag-900">Email</dt>
+              <dt className="font-semibold text-white">Email</dt>
               <dd>
-                <a href={`mailto:${site.contactEmail}`} className="text-stone-500 hover:text-lichen-600">
+                <a href={`mailto:${site.contactEmail}`} className="text-stone-500 hover:text-lichen-400">
                   {site.contactEmail}
                 </a>
               </dd>
             </div>
             <div>
-              <dt className="font-semibold text-slag-900">Headquarters</dt>
+              <dt className="font-semibold text-white">Headquarters</dt>
               <dd className="text-stone-500">{site.location}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-slag-900">Regional presence</dt>
+              <dt className="font-semibold text-white">Regional presence</dt>
               <dd className="text-stone-500">{site.gccPresence}</dd>
             </div>
           </dl>
 
           <div className="mt-8 flex flex-wrap gap-2">
-            <StatBadge>On-premise</StatBadge>
+            <StatBadge dark>On-premise</StatBadge>
           </div>
         </div>
 
         {/* The form panel is the section's warm-stone element, sitting on
-            the dark green field — charcoal fields inside it for contrast. */}
+            the charcoal field — charcoal fields inside it for contrast. */}
         <WetSurface className="reveal p-8 sm:p-10">
           {submitted ? (
             <div className="flex h-full min-h-[320px] flex-col items-center justify-center text-center">
@@ -119,7 +119,7 @@ export function Contact() {
                 <textarea id="message" name="message" rows={4} required className={`${inputClass} resize-none`} />
               </div>
               <div className="sm:col-span-2">
-                <MagneticButton type="submit" variant="dark" className="w-full sm:w-auto">
+                <MagneticButton type="submit" variant="primary" className="w-full sm:w-auto">
                   Send message
                 </MagneticButton>
               </div>

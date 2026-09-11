@@ -18,7 +18,7 @@ export function Architecture() {
 
       <div className="container-page relative" ref={ref}>
         <div className="reveal max-w-2xl">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-600">Architecture</p>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-dark">Architecture</p>
           <h2 className="text-4xl sm:text-5xl">
             One domain SLM. <span className="text-stone-500">A team of agents.</span>
           </h2>
@@ -29,13 +29,16 @@ export function Architecture() {
           </p>
         </div>
 
-        <div className="reveal relative mt-16">
-          <TechMark variant="crosshair" className="absolute -right-3 -top-3 z-10 hidden h-10 w-10 sm:block" />
+        {/* The section flips from warm stone to charcoal here — the
+            diagram photo sits inside a dark container, not on the light
+            canvas directly. */}
+        <div className="reveal relative mt-16 rounded-2xl bg-charcoal-900 p-4 shadow-[var(--shadow-block)] sm:p-6">
+          <TechMark variant="crosshair" dark className="absolute -right-3 -top-3 z-10 hidden h-10 w-10 sm:block" />
           <SiteImage
             filename="architecture-agents.png"
             alt="Amcule's Domain SLM architecture: a central model with layered internals — Domain Adaptation, Engineering Reasoning, Knowledge Augmentation, Safety/Validation — surrounded by specialist agents, wired to operational data and an operational decision."
             label="Architecture — Domain SLM + agents"
-            className="aspect-[16/10] w-full rounded-2xl shadow-[var(--shadow-block)] sm:aspect-[16/9]"
+            className="aspect-[16/10] w-full rounded-xl sm:aspect-[16/9]"
           />
         </div>
 

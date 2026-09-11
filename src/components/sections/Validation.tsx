@@ -14,7 +14,7 @@ function StatCounter({ value, suffix = '', label }: { value: number; suffix?: st
   const ref = useCountUp<HTMLSpanElement>(value, (n) => `${Math.round(n)}${suffix}`)
   return (
     <div>
-      <span ref={ref} className="font-display text-4xl font-bold text-lichen-600 tabular-nums">
+      <span ref={ref} className="font-display text-4xl font-bold text-lichen-500 tabular-nums">
         0{suffix}
       </span>
       <p className="mt-2 text-sm text-stone-500">{label}</p>
@@ -41,7 +41,7 @@ export function Validation() {
       <div className="container-page relative" ref={ref}>
         <div className="reveal grid grid-cols-1 items-end gap-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div className="max-w-2xl">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-600">Validation &amp; Pilots</p>
+            <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-dark">Validation &amp; Pilots</p>
             <h2 className="text-4xl sm:text-5xl">
               Calibrated on <span className="text-stone-500">real field data.</span>
             </h2>

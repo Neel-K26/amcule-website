@@ -77,7 +77,7 @@ export function Moat() {
 
       <div className="container-page relative" ref={ref}>
         <div className="reveal max-w-2xl">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-600">Why Amcule</p>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-dark">Why Amcule</p>
           <h2 className="text-4xl sm:text-5xl">
             Independence <span className="text-stone-500">is the architecture.</span>
           </h2>
@@ -130,7 +130,7 @@ export function Moat() {
         <WetSurface className="reveal mt-16 p-10 sm:p-14">
           <blockquote className="font-display text-2xl font-bold leading-snug text-slag-900 sm:text-3xl">
             An operator&rsquo;s ILM knows only that operator &mdash;{' '}
-            <span className="text-lichen-600">by architecture, not contract.</span>
+            <span className="text-lichen-dark">by architecture, not contract.</span>
           </blockquote>
         </WetSurface>
       </div>

@@ -128,7 +128,7 @@ export function Platform() {
 
       <div className="container-page relative" ref={ref}>
         <div className="reveal max-w-2xl">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-600">Platform</p>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-dark">Platform</p>
           <h2 className="text-4xl sm:text-5xl">
             The enterprise <span className="text-stone-500">intelligence suite.</span>
           </h2>
