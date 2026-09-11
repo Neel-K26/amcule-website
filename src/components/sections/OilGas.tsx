@@ -277,9 +277,10 @@ function PinnedWellbore() {
       const { index, local, depth, bitLocal, arrivalLocal } = depthAndBitAt(progress)
 
       // Entry title card — fully visible at rest, gone within the first
-      // ~3% of scroll so the descent takes over almost immediately.
+      // 5% of scroll so the descent takes over almost immediately.
+      const entryFade = clamp01(progress / 0.05)
       if (entryRef.current) {
-        const entryOpacity = clamp01(1 - progress * 32)
+        const entryOpacity = 1 - entryFade
         entryRef.current.style.opacity = String(entryOpacity)
         entryRef.current.style.pointerEvents = entryOpacity > 0.05 ? 'auto' : 'none'
       }
@@ -331,18 +332,21 @@ function PinnedWellbore() {
         approachRef.current.style.opacity = String(approachOpacity)
       }
 
-      // Ambient warm shift as the target nears, gone again by basement.
+      // Ambient lichen glow as the target nears, gone again by basement.
       if (warmOverlayRef.current) {
         const warm = index === HEIMDAL_INDEX ? clamp01(local * 2) : index > HEIMDAL_INDEX ? clamp01(1 - local * 3) : 0
         warmOverlayRef.current.style.opacity = String(warm * 0.16)
       }
 
-      // The payoff: the formation photo briefly brightens as the drill
-      // reaches the reservoir — the dark overlay eases from 0.85 down to
-      // 0.7 through arrival, then back to 0.85 once past Heimdal.
+      // The overlay starts at 0.15 during the entry card (so the formation
+      // photo reads behind it), ramps to the normal 0.65 resting level as
+      // the entry fades out over the first 5% of scroll, then dips again
+      // as the payoff: the formation photo briefly brightens as the drill
+      // reaches the reservoir.
       if (formationOverlayRef.current) {
+        const restingOpacity = 0.15 + entryFade * (0.65 - 0.15)
         const dip = index === HEIMDAL_INDEX ? arrivalLocal * 0.2 : 0
-        formationOverlayRef.current.style.background = `rgba(20,23,18,${(0.65 - dip).toFixed(2)})`
+        formationOverlayRef.current.style.background = `rgba(20,23,18,${clamp01(restingOpacity - dip).toFixed(2)})`
       }
 
       // Trail intensifies through the approach.
@@ -427,30 +431,73 @@ function PinnedWellbore() {
       {/* Dark overlay over the formation photo — keeps the diagram legible,
           eases toward 0.4 at Heimdal so the reveal is the image itself
           brightening as the drill reaches the reservoir. */}
-      <div ref={formationOverlayRef} aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: 'rgba(20,23,18,0.65)' }} />
+      <div ref={formationOverlayRef} aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: 'rgba(20,23,18,0.15)' }} />
 
       {/* Ambient warm shift as the target nears */}
       <div
         ref={warmOverlayRef}
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[#C87A3D] opacity-0"
+        className="pointer-events-none absolute inset-0 bg-[#C4E326] opacity-0"
       />
 
       {/* Entry state — what's on screen before any scroll happens, so the
-          section is never a blank dark frame. Fades out almost instantly
-          once the user scrolls, handing off to the descent. */}
+          section is never a blank dark frame. Fades out over the first 5%
+          of scroll once the user starts, handing off to the descent. */}
       <div
         ref={entryRef}
-        className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-5 px-6 text-center transition-opacity duration-200"
+        className="absolute inset-0 z-20 flex items-center justify-center overflow-hidden px-6 py-10 text-left transition-opacity duration-200"
       >
-        <p className="text-xs font-bold uppercase tracking-[0.3em] text-lichen-400">Well F-15 &middot; Volve Field</p>
-        <h3 className="font-display text-4xl font-bold uppercase tracking-tight text-white sm:text-5xl md:text-6xl">
-          From signals to <span className="text-lichen-400">decisions.</span>
-        </h3>
-        <p className="max-w-sm text-base text-white/65 sm:text-lg">Scroll to descend through the wellbore</p>
-        <svg className="mt-2 h-7 w-7 animate-bounce text-lichen-400" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M12 4v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <div className="max-w-2xl">
+          <div className="mb-4 flex items-center gap-3">
+            <span className="h-px w-10 bg-lichen-500" aria-hidden="true" />
+            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.04em] text-lichen-500">
+              Our Objectives &amp; Platform Technology
+            </p>
+          </div>
+
+          <h3 className="font-display text-3xl font-bold leading-tight text-ice-50 sm:text-4xl">Discover Our Objectives.</h3>
+          <p className="mt-3 max-w-xl text-sm leading-relaxed text-stone-500 sm:text-base">
+            Our objective is to build an indigenous Platform Technology Development ecosystem using
+            Institutional Language Models, domain-specific SLMs, and agentic AI infrastructure &mdash;
+            deployed across the following critical domains:
+          </p>
+
+          <SiteImage
+            filename="objectives.png"
+            alt="Amcule's platform technology objectives across critical industrial domains"
+            label="Objectives — platform technology overview"
+            className="mx-auto mt-6 h-48 w-[90%] rounded-2xl border-0 sm:h-64 lg:h-72 xl:h-[420px]"
+          />
+
+          <div className="mt-6 grid grid-cols-2 gap-x-8 gap-y-1.5">
+            {[
+              'Oil & Gas · Energy',
+              'Finance & Banking',
+              'Agriculture',
+              'Industrial Processes',
+              'Manufacturing',
+              'Rare Earth & Mineral',
+              'Semiconductor',
+              'Quantum Computing',
+              'Healthcare',
+              'Defence & Research',
+            ].map((domain) => (
+              <div key={domain} className="flex items-center gap-2 text-xs text-ice-50/75 sm:text-sm">
+                <span className="text-lichen-500" aria-hidden="true">
+                  &rarr;
+                </span>
+                {domain}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 flex items-center gap-2">
+            <svg className="h-4 w-4 animate-bounce text-lichen-500" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 4v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span className="text-xs font-medium text-stone-500">Scroll to descend through the wellbore</span>
+          </div>
+        </div>
       </div>
 
       <div className="container-page grid h-screen grid-cols-[1fr_auto] items-center gap-10 py-24">

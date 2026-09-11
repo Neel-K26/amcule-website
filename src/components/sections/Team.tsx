@@ -41,7 +41,7 @@ function TeamPhoto({ photo, name }: { photo: string; name: string }) {
 
   if (!src || errored) {
     return (
-      <div className="flex h-60 w-full items-center justify-center bg-charcoal-900">
+      <div className="flex aspect-[3/4] w-full items-center justify-center bg-charcoal-900">
         <span className="flex h-16 w-16 items-center justify-center rounded-full border border-lichen-500/30 bg-lichen-500/10 font-display text-xl font-bold text-lichen-400">
           {initials}
         </span>
@@ -50,13 +50,15 @@ function TeamPhoto({ photo, name }: { photo: string; name: string }) {
   }
 
   return (
-    <img
-      src={src}
-      alt={name}
-      loading="lazy"
-      onError={() => setErrored(true)}
-      className="h-60 w-full object-cover"
-    />
+    <div className="aspect-[3/4] w-full overflow-hidden">
+      <img
+        src={src}
+        alt={name}
+        loading="lazy"
+        onError={() => setErrored(true)}
+        className="h-full w-full object-cover object-top"
+      />
+    </div>
   )
 }
 
