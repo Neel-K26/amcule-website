@@ -194,6 +194,7 @@ function PinnedWellbore() {
   const payoffRef = useRef<HTMLDivElement | null>(null)
   const approachRef = useRef<HTMLDivElement | null>(null)
   const warmOverlayRef = useRef<HTMLDivElement | null>(null)
+  const entryRef = useRef<HTMLDivElement | null>(null)
   const formationOverlayRef = useRef<HTMLDivElement | null>(null)
   const crosshairRef = useRef<HTMLDivElement | null>(null)
   const heimdalBandRef = useRef<HTMLDivElement | null>(null)
@@ -274,6 +275,14 @@ function PinnedWellbore() {
     function onUpdate(self: ScrollTrigger) {
       const progress = self.progress
       const { index, local, depth, bitLocal, arrivalLocal } = depthAndBitAt(progress)
+
+      // Entry title card — fully visible at rest, gone within the first
+      // ~3% of scroll so the descent takes over almost immediately.
+      if (entryRef.current) {
+        const entryOpacity = clamp01(1 - progress * 32)
+        entryRef.current.style.opacity = String(entryOpacity)
+        entryRef.current.style.pointerEvents = entryOpacity > 0.05 ? 'auto' : 'none'
+      }
 
       const bitFraction = boundaries[index] + formationLayers[index].weight * bitLocal
       setBitY(bitFraction * trackHeight)
@@ -426,6 +435,23 @@ function PinnedWellbore() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-[#C87A3D] opacity-0"
       />
+
+      {/* Entry state — what's on screen before any scroll happens, so the
+          section is never a blank dark frame. Fades out almost instantly
+          once the user scrolls, handing off to the descent. */}
+      <div
+        ref={entryRef}
+        className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-5 px-6 text-center transition-opacity duration-200"
+      >
+        <p className="text-xs font-bold uppercase tracking-[0.3em] text-lichen-400">Well F-15 &middot; Volve Field</p>
+        <h3 className="font-display text-4xl font-bold uppercase tracking-tight text-white sm:text-5xl md:text-6xl">
+          From signals to <span className="text-lichen-400">decisions.</span>
+        </h3>
+        <p className="max-w-sm text-base text-white/65 sm:text-lg">Scroll to descend through the wellbore</p>
+        <svg className="mt-2 h-7 w-7 animate-bounce text-lichen-400" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 4v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
 
       <div className="container-page grid h-screen grid-cols-[1fr_auto] items-center gap-10 py-24">
         {/* Left: depth readout + cross-fading layer panel, on its own

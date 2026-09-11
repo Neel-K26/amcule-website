@@ -8,30 +8,30 @@ const team = [
   {
     name: 'Neel Khairnar',
     role: 'Founder & CEO',
-    body: 'ILM architecture, TENETDrill and the Volve calibration work.',
+    body: 'Architected Amcule&rsquo;s Independent Language Model from first principles, and built TENETDrill&rsquo;s physics-informed prediction core end-to-end. Led the Volve field calibration work that grounds the platform&rsquo;s drilling intelligence in real, publicly verifiable data &mdash; not synthetic benchmarks.',
     photo: 'team-nk.jpg',
   },
   {
     name: 'Dr. Bharat Kale',
     role: 'Director & Domain Validator',
-    body: 'Ex-Director General, C-MET. 30+ years in applied research and materials/electronics R&D leadership.',
+    body: 'Former Director General of C-MET, with more than three decades leading applied research in materials science and electronics. Brings institutional rigor to Amcule&rsquo;s domain validation process, holding every model decision to the standard of real industrial deployment.',
     photo: 'team-bk.jpg',
   },
   {
     name: 'Raj Kapoor',
     role: 'Strategic Advisor',
-    body: 'Founder, IBA. Dubai Golden Visa holder with an ADNOC / QatarEnergy network across the GCC.',
+    body: 'Founder of IBA and a Dubai Golden Visa holder with deep relationships across ADNOC and QatarEnergy. Advises on go-to-market strategy and partnership structuring across the GCC&rsquo;s national oil companies.',
     photo: 'team-rk.jpg',
   },
 ]
 
 /**
- * A member's headshot — same 56px rounded-full slot as the old
- * initial-letter avatar. Falls back to those initials if the photo isn't
+ * A member's headshot — fills the top of the card as a proper photo, not
+ * a small avatar. Falls back to an initials circle if the photo isn't
  * present yet or fails to load, rather than SiteImage's generic
  * "image slot" placeholder, which would look out of place here.
  */
-function TeamAvatar({ photo, name }: { photo: string; name: string }) {
+function TeamPhoto({ photo, name }: { photo: string; name: string }) {
   const src = getImage(photo)
   const [errored, setErrored] = useState(false)
   const initials = name
@@ -41,8 +41,10 @@ function TeamAvatar({ photo, name }: { photo: string; name: string }) {
 
   if (!src || errored) {
     return (
-      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-lichen-500/30 bg-lichen-500/10 font-display text-lg font-bold text-lichen-600">
-        {initials}
+      <div className="flex h-60 w-full items-center justify-center bg-charcoal-900">
+        <span className="flex h-16 w-16 items-center justify-center rounded-full border border-lichen-500/30 bg-lichen-500/10 font-display text-xl font-bold text-lichen-400">
+          {initials}
+        </span>
       </div>
     )
   }
@@ -53,7 +55,7 @@ function TeamAvatar({ photo, name }: { photo: string; name: string }) {
       alt={name}
       loading="lazy"
       onError={() => setErrored(true)}
-      className="mb-5 h-14 w-14 rounded-full border border-lichen-500/30 object-cover"
+      className="h-60 w-full object-cover"
     />
   )
 }
@@ -75,11 +77,16 @@ export function Team() {
 
         <div className="mt-16 grid grid-cols-1 gap-6 sm:grid-cols-3">
           {team.map((member) => (
-            <WetSurface key={member.name} className="reveal p-8">
-              <TeamAvatar photo={member.photo} name={member.name} />
-              <h3 className="font-display text-lg font-bold text-slag-900">{member.name}</h3>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-lichen-600">{member.role}</p>
-              <p className="mt-3 text-sm leading-relaxed text-stone-500">{member.body}</p>
+            <WetSurface
+              key={member.name}
+              className="reveal flex min-h-[400px] flex-col overflow-hidden border-t-[3px] border-t-lichen-500"
+            >
+              <TeamPhoto photo={member.photo} name={member.name} />
+              <div className="flex flex-1 flex-col p-7">
+                <h3 className="font-display text-2xl font-bold text-slag-900">{member.name}</h3>
+                <p className="mt-1 text-sm font-semibold uppercase tracking-wider text-lichen-600">{member.role}</p>
+                <p className="mt-4 text-sm leading-relaxed text-stone-500" dangerouslySetInnerHTML={{ __html: member.body }} />
+              </div>
             </WetSurface>
           ))}
         </div>
