@@ -15,7 +15,7 @@ export function Mission() {
     <section id="mission" className="relative">
       <div ref={ref} className="grid grid-cols-1 lg:grid-cols-[65fr_35fr]">
         {/* Mission — grounded, physical, lichen-green */}
-        <div className="reveal relative overflow-hidden bg-lichen-500 px-6 py-24 sm:px-10 sm:py-32 lg:px-16">
+        <div className="reveal relative overflow-hidden bg-lichen-900 px-6 py-24 sm:px-10 sm:py-32 lg:px-16">
           <RockBleed corner="bottom-left" filename="oilgas-formation.png" opacity={55} />
           <TopoLines corner="top-right" className="opacity-[0.09]" />
 

@@ -10,7 +10,7 @@ const columns: { title: string; links: string[] }[] = [
 /** Footer — the page's closing lichen-green band. Strong, branded close. */
 export function Footer() {
   return (
-    <footer className="relative bg-lichen-500 pt-16 pb-8">
+    <footer className="relative bg-lichen-900 pt-16 pb-8">
       <div className="container-page">
         <div className="grid grid-cols-1 gap-12 pb-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>

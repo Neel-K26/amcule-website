@@ -19,17 +19,22 @@
   --color-stone-200: #eae8de;
   --color-ice-100: rgb(17 17 17 / 0.12);
 
-  /* Signature lichen green — a large structural surface in selected
-     sections, not decoration. 500 is the dominant field/canvas green;
-     400 is a brighter accent reserved for small interactive states only;
-     600 is darker, for text-as-accent on stone/white. */
+  /* Signature lichen green. 500 is the bright accent — reserved for the
+     ticker band and small interactive states only now. 900 is the dark,
+     olive/forest "lichen-in-shadow" tone that carries most of the site's
+     green as a background field; dark text sits directly on it. 400/600
+     are small-scale accent variants (bright pops, text-as-accent). */
   --color-lichen-500: #b8d900;
   --color-lichen-400: #c4e326;
   --color-lichen-600: #8fa900;
+  --color-lichen-900: #42500e;
 
   /* Secondary/muted text, borders, dividers */
   --color-stone-500: #777872;
   --color-stone-700: #5c5d57;
+
+  /* Body text specifically for the dark-lichen-green sections. */
+  --color-slag-800: #30322c;
 
   /* Dark UI — the deliberate object colour for feature cards, the hero
      dashboard, and the footer. Not a background theme. */

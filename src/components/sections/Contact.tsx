@@ -29,16 +29,16 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="bg-dotgrid relative overflow-hidden bg-ice-50 py-28 sm:py-36">
-      <TopoLines corner="top-right" className="opacity-[0.06]" />
+    <section id="contact" className="relative overflow-hidden bg-lichen-900 py-28 sm:py-36">
+      <TopoLines corner="top-right" className="opacity-[0.09]" />
 
       <div className="container-page relative grid grid-cols-1 gap-12 lg:grid-cols-[0.8fr_1.2fr]" ref={ref}>
         <div className="reveal">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-600">Contact</p>
+          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-500">Contact</p>
           <h2 className="text-4xl sm:text-5xl">
             Let&rsquo;s talk <span className="text-stone-500">deployment.</span>
           </h2>
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-slag-700">
+          <p className="mt-6 max-w-md text-lg leading-relaxed text-slag-800">
             Tell us about your operation and where you&rsquo;d like an on-premise
             intelligence layer. We&rsquo;ll respond within one business day.
           </p>
@@ -67,9 +67,9 @@ export function Contact() {
           </div>
         </div>
 
-        {/* The form panel is the section's lichen-green element — dark
-            charcoal fields and dark text on top of it, not stone on stone. */}
-        <WetSurface className="reveal bg-lichen-500 p-8 sm:p-10">
+        {/* The form panel is the section's warm-stone element, sitting on
+            the dark green field — charcoal fields inside it for contrast. */}
+        <WetSurface className="reveal p-8 sm:p-10">
           {submitted ? (
             <div className="flex h-full min-h-[320px] flex-col items-center justify-center text-center">
               <p className="font-display text-2xl font-bold text-charcoal-900">Message received.</p>

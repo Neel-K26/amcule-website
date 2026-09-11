@@ -23,8 +23,8 @@ const initialReadings: WellReading[] = [
 
 /**
  * Charcoal live-telemetry instrument: TENETDrill readout for Well F-15.
- * Floats over the bottom-right of the hero image on desktop. Values
- * drift by a fraction of a percent every few seconds — live
+ * Floats over the bottom-right of the framed hero photo on desktop.
+ * Values drift by a fraction of a percent every few seconds — live
  * instrumentation, not a dramatic fluctuation.
  */
 function LiveDashboardCard({ className = '' }: { className?: string }) {
@@ -81,10 +81,10 @@ function LiveDashboardCard({ className = '' }: { className?: string }) {
  * CTAs → telemetry card assembles. Runs once on mount; respects
  * prefers-reduced-motion by skipping straight to the end state.
  *
- * Layout is a true two-column grid (image | text), both columns sharing
- * one reference frame — that's deliberate: absolute-positioning the image
- * against the viewport while the text sat inside the centred, max-width
- * container-page is what caused the drift/misalignment on wide screens.
+ * Dark lichen green is the full field here; the rig photo sits within
+ * it as a framed, contained element rather than a full-bleed column —
+ * everything (text and photo) lives inside one container-page grid so
+ * there's a single shared reference frame at any viewport width.
  */
 export function Hero() {
   const rootRef = useRef<HTMLElement | null>(null)
@@ -116,62 +116,54 @@ export function Hero() {
   }, [])
 
   return (
-    <section id="top" ref={rootRef} className="relative overflow-hidden bg-ice-50">
-      <div className="grid min-h-[100svh] grid-cols-1 lg:grid-cols-[45fr_55fr]">
-        {/* Left 45% — the image column, edge-to-edge, full height */}
-        <div className="relative h-[52vh] lg:h-auto">
-          <div className="absolute inset-0">
+    <section id="top" ref={rootRef} className="relative flex min-h-[100svh] items-center overflow-hidden bg-lichen-900 pt-32 pb-20">
+      <VerticalMarker className="inset-y-24 right-6" />
+
+      <div className="container-page relative grid grid-cols-1 items-center gap-14 lg:grid-cols-[1.05fr_0.95fr]">
+        <div>
+          <div className="mb-4 h-1 w-[60px] bg-lichen-500" aria-hidden="true" />
+          <p className="hero-eyebrow mb-4 inline-flex items-center gap-2 rounded-full border border-slag-900/10 bg-stone-200 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-slag-900 shadow-card">
+            Custom Language Models as a Service
+          </p>
+          <div className="mb-6 flex flex-wrap gap-2">
+            <StatBadge>Real-world data</StatBadge>
+            <StatBadge>On-premise</StatBadge>
+          </div>
+
+          <h1 className="font-display text-4xl leading-[1.05] font-bold tracking-tight text-slag-900 sm:text-5xl xl:text-[3.75rem]">
+            <span className="hero-line block">Intelligence built</span>
+            <span className="hero-line block">for heavy <span className="text-lichen-500">industry.</span></span>
+          </h1>
+
+          <p className="hero-subhead mt-8 max-w-xl text-lg leading-relaxed text-slag-800 sm:text-xl">
+            Small Language Models + Agents, trained exclusively on your organisation&rsquo;s
+            own data. Deployed on-premise, air-gapped where required &mdash; with{' '}
+            <span className="font-semibold text-slag-900">zero data egress.</span>
+          </p>
+
+          <div className="hero-ctas mt-10 flex flex-wrap items-center gap-4">
+            <MagneticButton variant="dark">Request Demo</MagneticButton>
+            <MagneticButton variant="white">See the Architecture</MagneticButton>
+          </div>
+        </div>
+
+        <div className="relative">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-[var(--shadow-block)] sm:aspect-[16/11]">
             <SiteImage
               filename="hero-rig.png"
               alt="Amcule-monitored drilling rig"
               label="Hero — rig / facility"
               className="h-full w-full rounded-none border-0"
             />
+            <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal-900/50 via-transparent to-transparent" />
           </div>
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 hidden bg-gradient-to-r from-transparent via-transparent to-ice-50 lg:block"
-          />
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-gradient-to-t from-charcoal-900/40 via-transparent to-transparent" />
 
-          <LiveDashboardCard className="absolute bottom-5 right-5 z-10 hidden sm:right-8 sm:bottom-8 lg:block" />
+          <LiveDashboardCard className="absolute -bottom-8 -right-3 z-10 hidden sm:-right-5 md:block" />
         </div>
 
-        {/* Right 55% — warm stone, headline + subtext + CTAs */}
-        <div className="bg-dotgrid relative flex items-center bg-ice-50 px-6 py-16 sm:px-10 lg:px-16">
-          <VerticalMarker className="inset-y-16 right-4" />
-
-          <div className="max-w-xl">
-            <div className="mb-4 h-1 w-[60px] bg-lichen-500" aria-hidden="true" />
-            <p className="hero-eyebrow mb-4 inline-flex items-center gap-2 rounded-full border border-slag-900/10 bg-stone-200 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-slag-900 shadow-card">
-              Custom Language Models as a Service
-            </p>
-            <div className="mb-6 flex flex-wrap gap-2">
-              <StatBadge>Real-world data</StatBadge>
-              <StatBadge>On-premise</StatBadge>
-            </div>
-
-            <h1 className="font-display text-4xl leading-[1.05] font-bold tracking-tight text-slag-900 sm:text-5xl xl:text-[3.75rem]">
-              <span className="hero-line block">Intelligence built</span>
-              <span className="hero-line block">for heavy <span className="text-lichen-600">industry.</span></span>
-            </h1>
-
-            <p className="hero-subhead mt-8 max-w-xl text-lg leading-relaxed text-slag-700 sm:text-xl">
-              Small Language Models + Agents, trained exclusively on your organisation&rsquo;s
-              own data. Deployed on-premise, air-gapped where required &mdash; with{' '}
-              <span className="font-semibold text-slag-900">zero data egress.</span>
-            </p>
-
-            <div className="hero-ctas mt-10 flex flex-wrap items-center gap-4">
-              <MagneticButton variant="primary">Request Demo</MagneticButton>
-              <MagneticButton variant="ghost">See the Architecture</MagneticButton>
-            </div>
-
-            {/* Mobile/tablet telemetry card — normal flow, image is stacked above */}
-            <div className="mt-12 flex justify-center lg:hidden">
-              <LiveDashboardCard />
-            </div>
-          </div>
+        {/* Mobile/tablet telemetry card — normal flow beneath the framed photo */}
+        <div className="flex justify-center md:hidden">
+          <LiveDashboardCard />
         </div>
       </div>
     </section>

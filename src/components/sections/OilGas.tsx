@@ -404,9 +404,19 @@ function PinnedWellbore() {
   }, [boundaries])
 
   return (
-    <div ref={sectionRef} className="oil-gas-pin relative min-h-screen">
+    <div ref={sectionRef} className="oil-gas-pin relative min-h-screen bg-charcoal-900">
+      {/* The formation photo lives INSIDE the pinned element, not on the
+          outer section — GSAP fixes this element to the viewport for the
+          whole pin, so a background scoped to the (unpinned) outer
+          section would scroll away underneath it within a few pixels of
+          scroll, leaving what looks like a blank screen. bg-charcoal-900
+          on the root above is the hard fallback if the photo fails. */}
+      <div aria-hidden="true" className="absolute inset-0">
+        <SiteImage filename="oilgas-formation.png" alt="" className="h-full w-full rounded-none border-0" />
+      </div>
+
       {/* Dark overlay over the formation photo — keeps the diagram legible,
-          eases toward 0.7 at Heimdal so the reveal is the image itself
+          eases toward 0.4 at Heimdal so the reveal is the image itself
           brightening as the drill reaches the reservoir. */}
       <div ref={formationOverlayRef} aria-hidden="true" className="pointer-events-none absolute inset-0" style={{ background: 'rgba(20,22,18,0.6)' }} />
 
@@ -691,14 +701,18 @@ export function OilGas() {
 
   return (
     <section id="oil-gas" className="relative overflow-hidden bg-charcoal-900">
-      {/* Full-bleed formation photo — geological texture and depth instead
-          of a flat colour field. A dark overlay keeps everything on top
-          of it legible; PinnedWellbore dials the overlay back at Heimdal
-          so the reveal is the photo itself brightening. */}
-      <div aria-hidden="true" className="absolute inset-0 -z-20">
-        <SiteImage filename="oilgas-formation.png" alt="" className="h-full w-full rounded-none border-0" />
-      </div>
-      {!pinnable && <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'rgba(20,22,18,0.6)' }} />}
+      {/* Full-bleed formation photo for the static (unpinned) path only —
+          PinnedWellbore carries its own copy scoped to the pinned element
+          itself, since a background here would scroll away underneath it
+          the moment the pin engages. */}
+      {!pinnable && (
+        <>
+          <div aria-hidden="true" className="absolute inset-0 -z-20">
+            <SiteImage filename="oilgas-formation.png" alt="" className="h-full w-full rounded-none border-0" />
+          </div>
+          <div aria-hidden="true" className="absolute inset-0 -z-10" style={{ background: 'rgba(20,22,18,0.6)' }} />
+        </>
+      )}
 
       <TopoLines corner="top-right" dark className="z-0 opacity-[0.08]" />
       <VerticalMarker className="inset-y-24 right-6" dark />
