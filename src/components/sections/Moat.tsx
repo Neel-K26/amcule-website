@@ -3,14 +3,20 @@ import whyamculeImage from '../../assets/images/whyamcule.png'
 /**
  * Why Amcule — the image already contains the headline, the three-tier
  * progression, the mossy volcanic rock imagery, and all the text. It IS
- * the section.
+ * the section: full-bleed background, no container, no box.
  */
 export function Moat() {
   return (
-    <section id="moat" className="bg-[#F3F1E8] py-20">
-      <div className="mx-auto max-w-[1200px] px-10">
-        <img src={whyamculeImage} alt="Why Amcule — Independence is the architecture" className="w-full rounded-2xl" loading="lazy" />
-      </div>
-    </section>
+    <section
+      id="why-amcule"
+      style={{
+        width: '100%',
+        minHeight: '100vh',
+        backgroundImage: `url(${whyamculeImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center top',
+        backgroundRepeat: 'no-repeat',
+      }}
+    />
   )
 }

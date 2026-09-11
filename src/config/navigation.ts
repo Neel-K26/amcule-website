@@ -9,7 +9,7 @@ export const navSections: NavSection[] = [
   { id: 'oil-gas', label: 'Oil & Gas' },
   { id: 'platform', label: 'Platform' },
   { id: 'validation', label: 'Validation' },
-  { id: 'moat', label: 'Why Amcule' },
+  { id: 'why-amcule', label: 'Why Amcule' },
   { id: 'team', label: 'Team' },
   { id: 'contact', label: 'Contact' },
 ]
