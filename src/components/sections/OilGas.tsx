@@ -716,8 +716,8 @@ export function OilGas() {
       <TopoLines corner="top-right" dark className="z-0 opacity-[0.08]" />
       <VerticalMarker className="inset-y-24 right-6" dark />
 
-      <div className="container-page relative py-28 sm:py-36">
-        <div className="reveal max-w-3xl" ref={introRef}>
+      <div className="container-page relative py-28 sm:py-36" ref={introRef}>
+        <div className="reveal max-w-3xl">
           <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-400">Our Objectives &amp; Platform Technology</p>
           <h2 className="text-4xl text-white sm:text-5xl">
             Discover Our Objectives.
