@@ -3,6 +3,7 @@ import { WetSurface } from '../ui/WetSurface'
 import { TopoLines } from '../ui/TopoLines'
 import { getImage } from '../../lib/images'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
+import teamBg from '../../assets/images/team-bg.png'
 
 const team = [
   {
@@ -62,11 +63,31 @@ function TeamPhoto({ photo, name }: { photo: string; name: string }) {
   )
 }
 
+/**
+ * Team — team-bg.png (the sunrise ridgeline + network-node motif) sits
+ * behind the whole section as a natural, mostly-uncovered backdrop; a
+ * light warm-stone wash (heavier at the top/bottom, lighter through the
+ * middle where the vista itself reads best) keeps the heading and cards
+ * legible without flattening the photo. Cards go frosted-glass so they
+ * feel set into the scene rather than pasted over it.
+ */
 export function Team() {
   const ref = useScrollReveal<HTMLDivElement>()
 
   return (
-    <section id="team" className="bg-dotgrid relative overflow-hidden bg-ice-50 py-28 sm:py-36">
+    <section
+      id="team"
+      className="relative overflow-hidden py-28 sm:py-36"
+      style={{ backgroundImage: `url(${teamBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: 'linear-gradient(180deg, rgba(243,241,232,0.6) 0%, rgba(243,241,232,0.32) 30%, rgba(243,241,232,0.55) 100%)',
+        }}
+      />
+
       <TopoLines corner="top-right" className="opacity-[0.06]" />
 
       <div className="container-page relative" ref={ref}>
@@ -84,7 +105,7 @@ export function Team() {
           {team.map((member) => (
             <WetSurface
               key={member.name}
-              className="reveal flex min-h-[400px] flex-col overflow-hidden border-t-[3px] border-t-lichen-500"
+              className="reveal flex min-h-[400px] flex-col overflow-hidden border-t-[3px] border-t-lichen-500 border-x-white/50 border-b-white/50 bg-white/75 shadow-card-lg backdrop-blur-md"
             >
               <TeamPhoto photo={member.photo} name={member.name} />
               <div className="flex flex-1 flex-col p-7">
