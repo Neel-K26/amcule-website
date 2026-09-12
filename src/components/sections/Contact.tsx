@@ -10,6 +10,7 @@ export function Contact() {
         backgroundImage: `url(${contactBgImage})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
         backgroundRepeat: 'no-repeat',
         display: 'flex',
         alignItems: 'center',
@@ -22,7 +23,7 @@ export function Contact() {
         style={{
           position: 'relative',
           zIndex: 1,
-          maxWidth: '1200px',
+          maxWidth: '1280px',
           margin: '0 auto',
           padding: '80px 40px',
           display: 'grid',
@@ -34,44 +35,89 @@ export function Contact() {
       >
         {/* LEFT — Info */}
         <div>
-          <p style={{ color: '#B8D900', fontFamily: 'JetBrains Mono', fontSize: '13px', letterSpacing: '0.08em', marginBottom: '12px' }}>
+          <p
+            style={{
+              color: '#B8D900',
+              fontFamily: 'JetBrains Mono',
+              fontSize: '15px',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              marginBottom: '16px',
+            }}
+          >
             — CONTACT
           </p>
-          <h2 style={{ color: '#ffffff', fontSize: '52px', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '20px' }}>
+          <h2
+            style={{
+              color: '#ffffff',
+              fontSize: 'clamp(44px, 5.5vw, 72px)',
+              fontWeight: 800,
+              lineHeight: 1.08,
+              letterSpacing: '-0.02em',
+              marginBottom: '24px',
+            }}
+          >
             Let&rsquo;s talk <span style={{ color: '#B8D900' }}>deployment.</span>
           </h2>
-          <p style={{ color: 'rgba(220,218,210,0.75)', fontSize: '18px', lineHeight: 1.65, maxWidth: '420px', marginBottom: '40px' }}>
+          <p style={{ color: 'rgba(230,228,220,0.88)', fontSize: '21px', fontWeight: 500, lineHeight: 1.65, maxWidth: '460px', marginBottom: '44px' }}>
             Tell us about your operation and where you&rsquo;d like an on-premise intelligence layer. We&rsquo;ll
             respond within one business day.
           </p>
 
           {/* Contact details */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '40px' }}>
-            <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-              <span style={{ color: '#B8D900', fontSize: '18px' }}>&#9993;</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginBottom: '44px' }}>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#B8D900', fontSize: '22px' }}>&#9993;</span>
               <div>
-                <p style={{ color: '#B8D900', fontFamily: 'JetBrains Mono', fontSize: '11px', letterSpacing: '0.06em', marginBottom: '2px' }}>
+                <p
+                  style={{
+                    color: '#B8D900',
+                    fontFamily: 'JetBrains Mono',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.06em',
+                    marginBottom: '4px',
+                  }}
+                >
                   EMAIL
                 </p>
-                <p style={{ color: '#ffffff', fontSize: '16px' }}>info@amcule.in</p>
+                <p style={{ color: '#ffffff', fontSize: '19px', fontWeight: 600 }}>info@amcule.in</p>
               </div>
             </div>
-            <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-              <span style={{ color: '#B8D900', fontSize: '18px' }}>&#128222;</span>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#B8D900', fontSize: '22px' }}>&#128222;</span>
               <div>
-                <p style={{ color: '#B8D900', fontFamily: 'JetBrains Mono', fontSize: '11px', letterSpacing: '0.06em', marginBottom: '2px' }}>
+                <p
+                  style={{
+                    color: '#B8D900',
+                    fontFamily: 'JetBrains Mono',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.06em',
+                    marginBottom: '4px',
+                  }}
+                >
                   PHONE
                 </p>
-                <p style={{ color: '#ffffff', fontSize: '16px' }}>+91 9022651817</p>
+                <p style={{ color: '#ffffff', fontSize: '19px', fontWeight: 600 }}>+91 9022651817</p>
               </div>
             </div>
-            <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-              <span style={{ color: '#B8D900', fontSize: '18px' }}>&#128205;</span>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#B8D900', fontSize: '22px' }}>&#128205;</span>
               <div>
-                <p style={{ color: '#B8D900', fontFamily: 'JetBrains Mono', fontSize: '11px', letterSpacing: '0.06em', marginBottom: '2px' }}>
+                <p
+                  style={{
+                    color: '#B8D900',
+                    fontFamily: 'JetBrains Mono',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.06em',
+                    marginBottom: '4px',
+                  }}
+                >
                   HEADQUARTERS
                 </p>
-                <p style={{ color: '#ffffff', fontSize: '15px', lineHeight: 1.5 }}>
+                <p style={{ color: '#ffffff', fontSize: '17px', fontWeight: 500, lineHeight: 1.55 }}>
                   Flat No. 24, Silvermoon, S. No. 1/2A/2,
                   <br />
                   Bavdhan, Pune &ndash; 411021,
@@ -80,29 +126,39 @@ export function Contact() {
                 </p>
               </div>
             </div>
-            <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-              <span style={{ color: '#B8D900', fontSize: '18px' }}>&#127760;</span>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#B8D900', fontSize: '22px' }}>&#127760;</span>
               <div>
-                <p style={{ color: '#B8D900', fontFamily: 'JetBrains Mono', fontSize: '11px', letterSpacing: '0.06em', marginBottom: '2px' }}>
+                <p
+                  style={{
+                    color: '#B8D900',
+                    fontFamily: 'JetBrains Mono',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.06em',
+                    marginBottom: '4px',
+                  }}
+                >
                   REGIONAL PRESENCE
                 </p>
-                <p style={{ color: '#ffffff', fontSize: '16px' }}>GCC via Dubai</p>
+                <p style={{ color: '#ffffff', fontSize: '19px', fontWeight: 600 }}>GCC via Dubai</p>
               </div>
             </div>
           </div>
 
           {/* Pills */}
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
             {['ON-PREMISE', 'SECURE', 'INDUSTRY-GRADE'].map((tag) => (
               <span
                 key={tag}
                 style={{
-                  padding: '6px 16px',
-                  border: '1px solid rgba(184,217,0,0.3)',
+                  padding: '8px 18px',
+                  border: '1px solid rgba(184,217,0,0.35)',
                   borderRadius: '9999px',
-                  color: 'rgba(184,217,0,0.8)',
+                  color: 'rgba(196,227,38,0.95)',
                   fontFamily: 'JetBrains Mono',
-                  fontSize: '11px',
+                  fontSize: '12px',
+                  fontWeight: 700,
                   letterSpacing: '0.06em',
                 }}
               >
@@ -120,7 +176,7 @@ export function Contact() {
             WebkitBackdropFilter: 'blur(20px)',
             border: '1px solid rgba(184,217,0,0.2)',
             borderRadius: '16px',
-            padding: '40px',
+            padding: '44px',
           }}
         >
           <form action="https://formsubmit.co/info@arqaya.in" method="POST">
@@ -129,16 +185,17 @@ export function Contact() {
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_next" value="https://amcule.vercel.app" />
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px', marginBottom: '18px' }}>
               <div>
                 <label
                   style={{
-                    color: 'rgba(184,217,0,0.8)',
+                    color: 'rgba(196,227,38,0.9)',
                     fontFamily: 'JetBrains Mono',
-                    fontSize: '11px',
+                    fontSize: '12px',
+                    fontWeight: 700,
                     letterSpacing: '0.06em',
                     display: 'block',
-                    marginBottom: '8px',
+                    marginBottom: '9px',
                   }}
                 >
                   FIRST NAME
@@ -149,12 +206,13 @@ export function Contact() {
                   required
                   style={{
                     width: '100%',
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(184,217,0,0.2)',
+                    background: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(184,217,0,0.25)',
                     borderRadius: '8px',
-                    padding: '12px 14px',
+                    padding: '14px 16px',
                     color: '#ffffff',
-                    fontSize: '15px',
+                    fontSize: '17px',
+                    fontWeight: 500,
                     outline: 'none',
                   }}
                 />
@@ -162,12 +220,13 @@ export function Contact() {
               <div>
                 <label
                   style={{
-                    color: 'rgba(184,217,0,0.8)',
+                    color: 'rgba(196,227,38,0.9)',
                     fontFamily: 'JetBrains Mono',
-                    fontSize: '11px',
+                    fontSize: '12px',
+                    fontWeight: 700,
                     letterSpacing: '0.06em',
                     display: 'block',
-                    marginBottom: '8px',
+                    marginBottom: '9px',
                   }}
                 >
                   LAST NAME
@@ -178,27 +237,29 @@ export function Contact() {
                   required
                   style={{
                     width: '100%',
-                    background: 'rgba(255,255,255,0.05)',
-                    border: '1px solid rgba(184,217,0,0.2)',
+                    background: 'rgba(255,255,255,0.06)',
+                    border: '1px solid rgba(184,217,0,0.25)',
                     borderRadius: '8px',
-                    padding: '12px 14px',
+                    padding: '14px 16px',
                     color: '#ffffff',
-                    fontSize: '15px',
+                    fontSize: '17px',
+                    fontWeight: 500,
                     outline: 'none',
                   }}
                 />
               </div>
             </div>
 
-            <div style={{ marginBottom: '16px' }}>
+            <div style={{ marginBottom: '18px' }}>
               <label
                 style={{
-                  color: 'rgba(184,217,0,0.8)',
+                  color: 'rgba(196,227,38,0.9)',
                   fontFamily: 'JetBrains Mono',
-                  fontSize: '11px',
+                  fontSize: '12px',
+                  fontWeight: 700,
                   letterSpacing: '0.06em',
                   display: 'block',
-                  marginBottom: '8px',
+                  marginBottom: '9px',
                 }}
               >
                 ORGANISATION
@@ -209,26 +270,28 @@ export function Contact() {
                 required
                 style={{
                   width: '100%',
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(184,217,0,0.2)',
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(184,217,0,0.25)',
                   borderRadius: '8px',
-                  padding: '12px 14px',
+                  padding: '14px 16px',
                   color: '#ffffff',
-                  fontSize: '15px',
+                  fontSize: '17px',
+                  fontWeight: 500,
                   outline: 'none',
                 }}
               />
             </div>
 
-            <div style={{ marginBottom: '16px' }}>
+            <div style={{ marginBottom: '18px' }}>
               <label
                 style={{
-                  color: 'rgba(184,217,0,0.8)',
+                  color: 'rgba(196,227,38,0.9)',
                   fontFamily: 'JetBrains Mono',
-                  fontSize: '11px',
+                  fontSize: '12px',
+                  fontWeight: 700,
                   letterSpacing: '0.06em',
                   display: 'block',
-                  marginBottom: '8px',
+                  marginBottom: '9px',
                 }}
               >
                 AREA OF INTEREST
@@ -238,11 +301,12 @@ export function Contact() {
                 style={{
                   width: '100%',
                   background: 'rgba(10,16,10,0.9)',
-                  border: '1px solid rgba(184,217,0,0.2)',
+                  border: '1px solid rgba(184,217,0,0.25)',
                   borderRadius: '8px',
-                  padding: '12px 14px',
+                  padding: '14px 16px',
                   color: '#ffffff',
-                  fontSize: '15px',
+                  fontSize: '17px',
+                  fontWeight: 500,
                   outline: 'none',
                 }}
               >
@@ -256,15 +320,16 @@ export function Contact() {
               </select>
             </div>
 
-            <div style={{ marginBottom: '24px' }}>
+            <div style={{ marginBottom: '28px' }}>
               <label
                 style={{
-                  color: 'rgba(184,217,0,0.8)',
+                  color: 'rgba(196,227,38,0.9)',
                   fontFamily: 'JetBrains Mono',
-                  fontSize: '11px',
+                  fontSize: '12px',
+                  fontWeight: 700,
                   letterSpacing: '0.06em',
                   display: 'block',
-                  marginBottom: '8px',
+                  marginBottom: '9px',
                 }}
               >
                 MESSAGE
@@ -275,19 +340,20 @@ export function Contact() {
                 placeholder="Tell us about your operation..."
                 style={{
                   width: '100%',
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid rgba(184,217,0,0.2)',
+                  background: 'rgba(255,255,255,0.06)',
+                  border: '1px solid rgba(184,217,0,0.25)',
                   borderRadius: '8px',
-                  padding: '12px 14px',
+                  padding: '14px 16px',
                   color: '#ffffff',
-                  fontSize: '15px',
+                  fontSize: '17px',
+                  fontWeight: 500,
                   outline: 'none',
                   resize: 'vertical',
                 }}
               />
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
               <button
                 type="submit"
                 style={{
@@ -295,20 +361,20 @@ export function Contact() {
                   color: '#111',
                   border: 'none',
                   borderRadius: '8px',
-                  padding: '14px 32px',
-                  fontSize: '15px',
-                  fontWeight: 700,
+                  padding: '16px 36px',
+                  fontSize: '17px',
+                  fontWeight: 800,
                   cursor: 'pointer',
                   fontFamily: 'JetBrains Mono',
                   letterSpacing: '0.02em',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  gap: '10px',
                 }}
               >
                 Send message &rarr;
               </button>
-              <p style={{ color: 'rgba(184,217,0,0.5)', fontSize: '12px', fontFamily: 'JetBrains Mono', textAlign: 'right' }}>
+              <p style={{ color: 'rgba(196,227,38,0.75)', fontSize: '13px', fontWeight: 600, fontFamily: 'JetBrains Mono', textAlign: 'right' }}>
                 &#128274; Your information is secure
                 <br />
                 and confidential.
