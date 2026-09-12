@@ -4,6 +4,7 @@ import { TopoLines } from '../ui/TopoLines'
 import { StatBadge } from '../ui/StatBadge'
 import { useScrollReveal } from '../../hooks/useScrollReveal'
 import { useCountUp } from '../../hooks/useCountUp'
+import validationBg from '../../assets/images/validation-bg.png'
 
 /**
  * Validation & Pilots — deliberately NOT "case studies": no fake client
@@ -26,17 +27,20 @@ export function Validation() {
   const ref = useScrollReveal<HTMLDivElement>()
 
   return (
-    <section id="validation" className="bg-dotgrid relative overflow-hidden bg-ice-50 py-28 sm:py-36">
-      <TopoLines corner="top-right" className="opacity-[0.06]" />
-
-      {/* Continues the ops-floor bleed from the bottom of Platform above,
-          fading down into the Warm Stone background. */}
+    <section
+      id="validation"
+      className="relative overflow-hidden py-28 sm:py-36"
+      style={{ backgroundImage: `url(${validationBg})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+    >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 z-0 h-40 opacity-25 [mask-image:linear-gradient(to_top,transparent,black_60%)] sm:h-52"
-      >
-        <SiteImage filename="platform-ops-floor.png" alt="" className="h-full w-full rounded-none border-0 grayscale" />
-      </div>
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: 'linear-gradient(180deg, rgba(243,241,232,0.62) 0%, rgba(243,241,232,0.3) 35%, rgba(243,241,232,0.68) 100%)',
+        }}
+      />
+
+      <TopoLines corner="top-right" className="opacity-[0.06]" />
 
       <div className="container-page relative" ref={ref}>
         <div className="reveal grid grid-cols-1 items-end gap-10 lg:grid-cols-[1.1fr_0.9fr]">
@@ -64,7 +68,7 @@ export function Validation() {
         </div>
 
         <div className="reveal mt-16 grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <WetSurface className="p-8">
+          <WetSurface className="border-t-[3px] border-t-lichen-500 border-x-white/50 border-b-white/50 bg-white/80 p-8 shadow-card-lg backdrop-blur-md">
             <h3 className="font-display text-xl font-bold text-slag-900">Volve Dataset Calibration</h3>
             <p className="mt-3 text-sm leading-relaxed text-stone-500">
               Formation and drilling parameters calibrated end-to-end against Equinor&rsquo;s
@@ -73,7 +77,7 @@ export function Validation() {
             </p>
           </WetSurface>
 
-          <WetSurface className="p-8">
+          <WetSurface className="border-t-[3px] border-t-lichen-500 border-x-white/50 border-b-white/50 bg-white/80 p-8 shadow-card-lg backdrop-blur-md">
             <h3 className="font-display text-xl font-bold text-slag-900">TENETDrill Demo</h3>
             <p className="mt-3 text-sm leading-relaxed text-stone-500">
               A live, working demonstration of stuck-pipe prediction and BHA optimisation
@@ -81,7 +85,7 @@ export function Validation() {
             </p>
           </WetSurface>
 
-          <WetSurface className="p-8">
+          <WetSurface className="border-t-[3px] border-t-lichen-500 border-x-white/50 border-b-white/50 bg-white/80 p-8 shadow-card-lg backdrop-blur-md">
             <h3 className="font-display text-xl font-bold text-slag-900">Research &amp; Whitepapers</h3>
             <p className="mt-3 text-sm leading-relaxed text-stone-500">
               Ongoing methodology write-ups on physics-informed ML for drilling and the
@@ -90,7 +94,7 @@ export function Validation() {
           </WetSurface>
         </div>
 
-        <WetSurface className="reveal mt-16 grid grid-cols-2 gap-8 p-10 sm:grid-cols-4">
+        <WetSurface className="reveal mt-16 grid grid-cols-2 gap-8 border-white/50 bg-white/80 p-10 shadow-card-lg backdrop-blur-md sm:grid-cols-4">
           <StatCounter value={85} suffix=" mD" label="Calibrated permeability" />
           <StatCounter value={92} suffix="%" label="ILM confidence, F-15" />
           <StatCounter value={50} suffix=" MB" label="TENETEdge RAM ceiling" />
