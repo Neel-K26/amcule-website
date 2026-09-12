@@ -695,7 +695,6 @@ function StaticWellbore() {
 
 /** Oil & Gas — SIGNATURE SECTION: the pinned, scroll-scrubbed wellbore descent. */
 export function OilGas() {
-  const introRef = useScrollReveal<HTMLDivElement>()
   const pinnable = usePinnable()
 
   return (
@@ -716,43 +715,11 @@ export function OilGas() {
       <TopoLines corner="top-right" dark className="z-0 opacity-[0.08]" />
       <VerticalMarker className="inset-y-24 right-6" dark />
 
-      <div className="container-page relative py-28 sm:py-36" ref={introRef}>
-        <div className="reveal max-w-3xl">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-400">Our Objectives &amp; Platform Technology</p>
-          <h2 className="text-4xl text-white sm:text-5xl">
-            Discover Our Objectives.
-          </h2>
+      {!pinnable && (
+        <div className="container-page relative py-28 sm:py-36">
+          <StaticWellbore />
         </div>
-
-        <SiteImage
-          filename="objectives.png"
-          alt="Amcule's platform technology objectives across critical industrial domains"
-          label="Objectives — platform technology overview"
-          className="reveal mt-10 h-[45vh] w-full rounded-2xl border-0 sm:h-[60vh] lg:h-[80vh]"
-        />
-
-        <div className="reveal mt-10 flex flex-wrap gap-x-3 gap-y-2 text-sm text-white/70 sm:text-base">
-          {[
-            'Oil & Gas · Energy',
-            'Finance & Banking',
-            'Agriculture',
-            'Industrial Processes',
-            'Manufacturing',
-            'Rare Earth & Mineral Extraction',
-            'Semiconductor Industry',
-            'Healthcare',
-            'Defence & Research',
-            'Quantum Computing',
-          ].map((domain, i, arr) => (
-            <span key={domain} className="flex items-center gap-3">
-              {domain}
-              {i < arr.length - 1 && <span className="text-lichen-500">|</span>}
-            </span>
-          ))}
-        </div>
-
-        {!pinnable && <StaticWellbore />}
-      </div>
+      )}
 
       {pinnable && <PinnedWellbore />}
 

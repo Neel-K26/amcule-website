@@ -4,6 +4,7 @@ import { Hero } from './components/sections/Hero'
 import { TrustTicker } from './components/sections/TrustTicker'
 import { WhatWeDo } from './components/sections/WhatWeDo'
 import { Architecture } from './components/sections/Architecture'
+import { Objectives } from './components/sections/Objectives'
 import { OilGas } from './components/sections/OilGas'
 import { Platform } from './components/sections/Platform'
 import { Validation } from './components/sections/Validation'
@@ -25,6 +26,7 @@ function App() {
         <TrustTicker />
         <WhatWeDo />
         <Architecture />
+        <Objectives />
         <OilGas />
         <Platform />
         <Validation />
