@@ -1,131 +1,321 @@
-import { useState, type FormEvent } from 'react'
-import { WetSurface } from '../ui/WetSurface'
-import { MagneticButton } from '../ui/MagneticButton'
-import { useScrollReveal } from '../../hooks/useScrollReveal'
-import { site } from '../../config/site'
-import { TopoLines } from '../ui/TopoLines'
-import { StatBadge } from '../ui/StatBadge'
-
-const interests = [
-  'TENETDrill',
-  'TENETFlow',
-  'TENETEdge',
-  'Full ILM',
-  'Research partnership',
-  'Investment',
-]
-
-const inputClass =
-  'w-full rounded-xl border border-white/10 bg-charcoal-900 px-4 py-3 text-sm text-white placeholder:text-white/40 transition-colors focus:border-lichen-400 focus:outline-none'
+import contactBgImage from '../../assets/images/contact-bg.png'
 
 export function Contact() {
-  const ref = useScrollReveal<HTMLDivElement>()
-  const [submitted, setSubmitted] = useState(false)
-
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-    // TODO: wire to real submission endpoint (email service / form backend).
-    setSubmitted(true)
-  }
-
   return (
-    <section id="contact" className="relative overflow-hidden bg-charcoal-900 py-28 sm:py-36">
-      <TopoLines corner="top-right" dark className="opacity-[0.09]" />
+    <section
+      id="contact"
+      style={{
+        position: 'relative',
+        minHeight: '100vh',
+        backgroundImage: `url(${contactBgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        display: 'flex',
+        alignItems: 'center',
+      }}
+    >
+      {/* Dark overlay */}
+      <div style={{ position: 'absolute', inset: 0, background: 'rgba(8,12,8,0.55)', pointerEvents: 'none' }} />
 
-      <div className="container-page relative grid grid-cols-1 gap-12 lg:grid-cols-[0.8fr_1.2fr]" ref={ref}>
-        <div className="reveal">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-lichen-500">Contact</p>
-          <h2 className="text-4xl text-white sm:text-5xl">
-            Let&rsquo;s talk <span className="text-stone-500">deployment.</span>
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 1,
+          maxWidth: '1200px',
+          margin: '0 auto',
+          padding: '80px 40px',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '80px',
+          alignItems: 'center',
+          width: '100%',
+        }}
+      >
+        {/* LEFT — Info */}
+        <div>
+          <p style={{ color: '#B8D900', fontFamily: 'JetBrains Mono', fontSize: '13px', letterSpacing: '0.08em', marginBottom: '12px' }}>
+            — CONTACT
+          </p>
+          <h2 style={{ color: '#ffffff', fontSize: '52px', fontWeight: 700, lineHeight: 1.1, letterSpacing: '-0.02em', marginBottom: '20px' }}>
+            Let&rsquo;s talk <span style={{ color: '#B8D900' }}>deployment.</span>
           </h2>
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-white/70">
-            Tell us about your operation and where you&rsquo;d like an on-premise
-            intelligence layer. We&rsquo;ll respond within one business day.
+          <p style={{ color: 'rgba(220,218,210,0.75)', fontSize: '18px', lineHeight: 1.65, maxWidth: '420px', marginBottom: '40px' }}>
+            Tell us about your operation and where you&rsquo;d like an on-premise intelligence layer. We&rsquo;ll
+            respond within one business day.
           </p>
 
-          <dl className="mt-10 space-y-4 text-sm">
-            <div>
-              <dt className="font-semibold text-white">Email</dt>
-              <dd>
-                <a href={`mailto:${site.contactEmail}`} className="text-stone-500 hover:text-lichen-400">
-                  {site.contactEmail}
-                </a>
-              </dd>
+          {/* Contact details */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '40px' }}>
+            <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#B8D900', fontSize: '18px' }}>&#9993;</span>
+              <div>
+                <p style={{ color: '#B8D900', fontFamily: 'JetBrains Mono', fontSize: '11px', letterSpacing: '0.06em', marginBottom: '2px' }}>
+                  EMAIL
+                </p>
+                <p style={{ color: '#ffffff', fontSize: '16px' }}>info@amcule.in</p>
+              </div>
             </div>
-            <div>
-              <dt className="font-semibold text-white">Headquarters</dt>
-              <dd className="text-stone-500">{site.location}</dd>
+            <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#B8D900', fontSize: '18px' }}>&#128222;</span>
+              <div>
+                <p style={{ color: '#B8D900', fontFamily: 'JetBrains Mono', fontSize: '11px', letterSpacing: '0.06em', marginBottom: '2px' }}>
+                  PHONE
+                </p>
+                <p style={{ color: '#ffffff', fontSize: '16px' }}>+91 9022651817</p>
+              </div>
             </div>
-            <div>
-              <dt className="font-semibold text-white">Regional presence</dt>
-              <dd className="text-stone-500">{site.gccPresence}</dd>
+            <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#B8D900', fontSize: '18px' }}>&#128205;</span>
+              <div>
+                <p style={{ color: '#B8D900', fontFamily: 'JetBrains Mono', fontSize: '11px', letterSpacing: '0.06em', marginBottom: '2px' }}>
+                  HEADQUARTERS
+                </p>
+                <p style={{ color: '#ffffff', fontSize: '15px', lineHeight: 1.5 }}>
+                  Flat No. 24, Silvermoon, S. No. 1/2A/2,
+                  <br />
+                  Bavdhan, Pune &ndash; 411021,
+                  <br />
+                  Maharashtra, India
+                </p>
+              </div>
             </div>
-          </dl>
+            <div style={{ display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+              <span style={{ color: '#B8D900', fontSize: '18px' }}>&#127760;</span>
+              <div>
+                <p style={{ color: '#B8D900', fontFamily: 'JetBrains Mono', fontSize: '11px', letterSpacing: '0.06em', marginBottom: '2px' }}>
+                  REGIONAL PRESENCE
+                </p>
+                <p style={{ color: '#ffffff', fontSize: '16px' }}>GCC via Dubai</p>
+              </div>
+            </div>
+          </div>
 
-          <div className="mt-8 flex flex-wrap gap-2">
-            <StatBadge dark>On-premise</StatBadge>
+          {/* Pills */}
+          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+            {['ON-PREMISE', 'SECURE', 'INDUSTRY-GRADE'].map((tag) => (
+              <span
+                key={tag}
+                style={{
+                  padding: '6px 16px',
+                  border: '1px solid rgba(184,217,0,0.3)',
+                  borderRadius: '9999px',
+                  color: 'rgba(184,217,0,0.8)',
+                  fontFamily: 'JetBrains Mono',
+                  fontSize: '11px',
+                  letterSpacing: '0.06em',
+                }}
+              >
+                &bull; {tag}
+              </span>
+            ))}
           </div>
         </div>
 
-        {/* The form panel is the section's warm-stone element, sitting on
-            the charcoal field — charcoal fields inside it for contrast. */}
-        <WetSurface className="reveal p-8 sm:p-10">
-          {submitted ? (
-            <div className="flex h-full min-h-[320px] flex-col items-center justify-center text-center">
-              <p className="font-display text-2xl font-bold text-charcoal-900">Message received.</p>
-              <p className="mt-3 max-w-sm text-sm text-slag-900/70">
-                Thank you for reaching out &mdash; a member of the Amcule team will be in touch shortly.
+        {/* RIGHT — Glass form */}
+        <div
+          style={{
+            background: 'rgba(10,16,10,0.7)',
+            backdropFilter: 'blur(20px)',
+            WebkitBackdropFilter: 'blur(20px)',
+            border: '1px solid rgba(184,217,0,0.2)',
+            borderRadius: '16px',
+            padding: '40px',
+          }}
+        >
+          <form action="https://formsubmit.co/info@arqaya.in" method="POST">
+            {/* Formsubmit config */}
+            <input type="hidden" name="_subject" value="New Amcule Demo Request" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_next" value="https://amcule.vercel.app" />
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+              <div>
+                <label
+                  style={{
+                    color: 'rgba(184,217,0,0.8)',
+                    fontFamily: 'JetBrains Mono',
+                    fontSize: '11px',
+                    letterSpacing: '0.06em',
+                    display: 'block',
+                    marginBottom: '8px',
+                  }}
+                >
+                  FIRST NAME
+                </label>
+                <input
+                  name="first_name"
+                  type="text"
+                  required
+                  style={{
+                    width: '100%',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(184,217,0,0.2)',
+                    borderRadius: '8px',
+                    padding: '12px 14px',
+                    color: '#ffffff',
+                    fontSize: '15px',
+                    outline: 'none',
+                  }}
+                />
+              </div>
+              <div>
+                <label
+                  style={{
+                    color: 'rgba(184,217,0,0.8)',
+                    fontFamily: 'JetBrains Mono',
+                    fontSize: '11px',
+                    letterSpacing: '0.06em',
+                    display: 'block',
+                    marginBottom: '8px',
+                  }}
+                >
+                  LAST NAME
+                </label>
+                <input
+                  name="last_name"
+                  type="text"
+                  required
+                  style={{
+                    width: '100%',
+                    background: 'rgba(255,255,255,0.05)',
+                    border: '1px solid rgba(184,217,0,0.2)',
+                    borderRadius: '8px',
+                    padding: '12px 14px',
+                    color: '#ffffff',
+                    fontSize: '15px',
+                    outline: 'none',
+                  }}
+                />
+              </div>
+            </div>
+
+            <div style={{ marginBottom: '16px' }}>
+              <label
+                style={{
+                  color: 'rgba(184,217,0,0.8)',
+                  fontFamily: 'JetBrains Mono',
+                  fontSize: '11px',
+                  letterSpacing: '0.06em',
+                  display: 'block',
+                  marginBottom: '8px',
+                }}
+              >
+                ORGANISATION
+              </label>
+              <input
+                name="organisation"
+                type="text"
+                required
+                style={{
+                  width: '100%',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(184,217,0,0.2)',
+                  borderRadius: '8px',
+                  padding: '12px 14px',
+                  color: '#ffffff',
+                  fontSize: '15px',
+                  outline: 'none',
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: '16px' }}>
+              <label
+                style={{
+                  color: 'rgba(184,217,0,0.8)',
+                  fontFamily: 'JetBrains Mono',
+                  fontSize: '11px',
+                  letterSpacing: '0.06em',
+                  display: 'block',
+                  marginBottom: '8px',
+                }}
+              >
+                AREA OF INTEREST
+              </label>
+              <select
+                name="area_of_interest"
+                style={{
+                  width: '100%',
+                  background: 'rgba(10,16,10,0.9)',
+                  border: '1px solid rgba(184,217,0,0.2)',
+                  borderRadius: '8px',
+                  padding: '12px 14px',
+                  color: '#ffffff',
+                  fontSize: '15px',
+                  outline: 'none',
+                }}
+              >
+                <option value="">Select an area</option>
+                <option>TENETDrill &mdash; Drilling Intelligence</option>
+                <option>TENETFlow &mdash; Formation Intelligence</option>
+                <option>TENETEdge &mdash; Edge Deployment</option>
+                <option>Full ILM Deployment</option>
+                <option>Research Partnership</option>
+                <option>Investment Enquiry</option>
+              </select>
+            </div>
+
+            <div style={{ marginBottom: '24px' }}>
+              <label
+                style={{
+                  color: 'rgba(184,217,0,0.8)',
+                  fontFamily: 'JetBrains Mono',
+                  fontSize: '11px',
+                  letterSpacing: '0.06em',
+                  display: 'block',
+                  marginBottom: '8px',
+                }}
+              >
+                MESSAGE
+              </label>
+              <textarea
+                name="message"
+                rows={4}
+                placeholder="Tell us about your operation..."
+                style={{
+                  width: '100%',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(184,217,0,0.2)',
+                  borderRadius: '8px',
+                  padding: '12px 14px',
+                  color: '#ffffff',
+                  fontSize: '15px',
+                  outline: 'none',
+                  resize: 'vertical',
+                }}
+              />
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <button
+                type="submit"
+                style={{
+                  background: '#B8D900',
+                  color: '#111',
+                  border: 'none',
+                  borderRadius: '8px',
+                  padding: '14px 32px',
+                  fontSize: '15px',
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                  fontFamily: 'JetBrains Mono',
+                  letterSpacing: '0.02em',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}
+              >
+                Send message &rarr;
+              </button>
+              <p style={{ color: 'rgba(184,217,0,0.5)', fontSize: '12px', fontFamily: 'JetBrains Mono', textAlign: 'right' }}>
+                &#128274; Your information is secure
+                <br />
+                and confidential.
               </p>
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-              <div>
-                <label htmlFor="firstName" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slag-900/70">
-                  First name
-                </label>
-                <input id="firstName" name="firstName" type="text" required className={inputClass} />
-              </div>
-              <div>
-                <label htmlFor="lastName" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slag-900/70">
-                  Last name
-                </label>
-                <input id="lastName" name="lastName" type="text" required className={inputClass} />
-              </div>
-              <div className="sm:col-span-2">
-                <label htmlFor="organisation" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slag-900/70">
-                  Organisation
-                </label>
-                <input id="organisation" name="organisation" type="text" required className={inputClass} />
-              </div>
-              <div className="sm:col-span-2">
-                <label htmlFor="interest" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slag-900/70">
-                  Area of interest
-                </label>
-                <select id="interest" name="interest" required defaultValue="" className={inputClass}>
-                  <option value="" disabled>
-                    Select an area
-                  </option>
-                  {interests.map((i) => (
-                    <option key={i} value={i} className="bg-charcoal-900 text-white">
-                      {i}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="sm:col-span-2">
-                <label htmlFor="message" className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-slag-900/70">
-                  Message
-                </label>
-                <textarea id="message" name="message" rows={4} required className={`${inputClass} resize-none`} />
-              </div>
-              <div className="sm:col-span-2">
-                <MagneticButton type="submit" variant="primary" className="w-full sm:w-auto">
-                  Send message
-                </MagneticButton>
-              </div>
-            </form>
-          )}
-        </WetSurface>
+          </form>
+        </div>
       </div>
     </section>
   )
