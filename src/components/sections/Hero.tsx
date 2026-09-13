@@ -100,7 +100,7 @@ export function Hero() {
         <img
           src={heroRigImage}
           alt="Drilling rig at sunrise"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center' }}
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'right center' }}
         />
       </div>
 
